@@ -8,18 +8,16 @@
 
 /* Begin PBXBuildFile section */
 		04FCE2D226D5046F001D1BE8 /* FourierApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04FCE2D126D5046F001D1BE8 /* FourierApp.swift */; };
-		04FCE2D426D5046F001D1BE8 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04FCE2D326D5046F001D1BE8 /* ContentView.swift */; };
 		04FCE2D626D50470001D1BE8 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 04FCE2D526D50470001D1BE8 /* Assets.xcassets */; };
-		04FCE2D926D50470001D1BE8 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 04FCE2D826D50470001D1BE8 /* Preview Assets.xcassets */; };
+		04FCE2E126D5146F001D1BE8 /* DrawView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04FCE2E026D5146F001D1BE8 /* DrawView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		04FCE2CE26D5046F001D1BE8 /* Fourier.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Fourier.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		04FCE2D126D5046F001D1BE8 /* FourierApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FourierApp.swift; sourceTree = "<group>"; };
-		04FCE2D326D5046F001D1BE8 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		04FCE2D526D50470001D1BE8 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
-		04FCE2D826D50470001D1BE8 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		04FCE2DA26D50470001D1BE8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		04FCE2E026D5146F001D1BE8 /* DrawView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DrawView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -53,20 +51,11 @@
 			isa = PBXGroup;
 			children = (
 				04FCE2D126D5046F001D1BE8 /* FourierApp.swift */,
-				04FCE2D326D5046F001D1BE8 /* ContentView.swift */,
+				04FCE2E026D5146F001D1BE8 /* DrawView.swift */,
 				04FCE2D526D50470001D1BE8 /* Assets.xcassets */,
 				04FCE2DA26D50470001D1BE8 /* Info.plist */,
-				04FCE2D726D50470001D1BE8 /* Preview Content */,
 			);
 			path = Fourier;
-			sourceTree = "<group>";
-		};
-		04FCE2D726D50470001D1BE8 /* Preview Content */ = {
-			isa = PBXGroup;
-			children = (
-				04FCE2D826D50470001D1BE8 /* Preview Assets.xcassets */,
-			);
-			path = "Preview Content";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -126,7 +115,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				04FCE2D926D50470001D1BE8 /* Preview Assets.xcassets in Resources */,
 				04FCE2D626D50470001D1BE8 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -138,8 +126,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				04FCE2D426D5046F001D1BE8 /* ContentView.swift in Sources */,
 				04FCE2D226D5046F001D1BE8 /* FourierApp.swift in Sources */,
+				04FCE2E126D5146F001D1BE8 /* DrawView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -268,7 +256,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_ASSET_PATHS = "\"Fourier/Preview Content\"";
+				DEVELOPMENT_ASSET_PATHS = "";
 				DEVELOPMENT_TEAM = T4L8JBB88A;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = Fourier/Info.plist;
@@ -290,7 +278,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_ASSET_PATHS = "\"Fourier/Preview Content\"";
+				DEVELOPMENT_ASSET_PATHS = "";
 				DEVELOPMENT_TEAM = T4L8JBB88A;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = Fourier/Info.plist;

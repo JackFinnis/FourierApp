@@ -11,7 +11,7 @@ import SwiftUI
 struct FourierApp: App {
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            DrawView()
         }
     }
 }
