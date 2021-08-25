@@ -10,8 +10,11 @@ import SwiftUI
 struct DrawView: View {
     @State var uiImage: UIImage?
     @State var path = Path()
+    
     @State var drawing: Bool = false
     @State var loading: Bool = false
+    @State var recentlySaved: Bool = false
+    @State var recentlyFailed: Bool = false
     
     @State var N: Double = 10.0
     @State var pathPoints = []
@@ -35,42 +38,20 @@ struct DrawView: View {
                 }
             }
             .padding(.horizontal)
-            .padding(.bottom, 50)
+            .padding(.vertical, 100)
             .gesture(drawGesture)
-            
-            if uiImage != nil {
-                VStack {
-                    Spacer()
-                    HStack {
-                        Text("\(Int(N)*2+1) Epicycles")
-                        Slider(value: $N, in: 1...20, step: 1, onEditingChanged: { sliding in
-                            if !sliding {
-                                if selectedImage == nil {
-                                    fourierPathTransform()
-                                } else {
-                                    fourierImgTransform()
-                                }
-                            }
-                        })
-                    }
-                    .padding(.horizontal)
-                    .padding(.vertical, 10)
-                    .background(Color(UIColor.systemBackground))
-                    .clipShape(Capsule())
-                    .compositingGroup()
-                    .shadow(color: Color(UIColor.systemFill), radius: 5)
-                    .padding()
-                    .frame(maxWidth: 500)
-                }
-            }
             
             VStack {
                 HStack {
                     if uiImage != nil {
                         Button {
+                            recentlySaved = true
                             UIImageWriteToSavedPhotosAlbum(uiImage!, nil, nil, nil)
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                                self.recentlySaved = false
+                            }
                         } label: {
-                            Image(systemName: "square.and.arrow.down")
+                            Image(systemName: recentlySaved ? "checkmark" : "square.and.arrow.down")
                                 .font(.system(size: 25))
                                 .frame(width: 60, height: 60)
                                 .background(Color(UIColor.systemBackground))
@@ -90,7 +71,7 @@ struct DrawView: View {
                                 .font(.system(size: 25))
                                 .frame(width: 60, height: 60)
                         } else {
-                            Image(systemName: "photo")
+                            Image(systemName: recentlyFailed ? "xmark" : "photo")
                                 .font(.system(size: 25))
                                 .frame(width: 60, height: 60)
                         }
@@ -102,6 +83,42 @@ struct DrawView: View {
                     .padding()
                 }
                 Spacer()
+                
+                if uiImage != nil {
+                    VStack {
+                        HStack {
+                            Text("\(Int(N)*2) Epicycles")
+                            Spacer()
+                            Stepper("", value: $N, in: 1...100, onEditingChanged: { stepping in
+                                if !stepping {
+                                    if selectedImage == nil {
+                                        fourierPathTransform()
+                                    } else {
+                                        fourierImgTransform()
+                                    }
+                                }
+                            })
+                        }
+                        
+                        Slider(value: $N, in: 1...100, step: 1, onEditingChanged: { sliding in
+                            if !sliding {
+                                if selectedImage == nil {
+                                    fourierPathTransform()
+                                } else {
+                                    fourierImgTransform()
+                                }
+                            }
+                        })
+                    }
+                    .frame(maxWidth: 500)
+                    .padding(.horizontal)
+                    .padding(.vertical, 10)
+                    .background(Color(UIColor.systemBackground))
+                    .cornerRadius(20)
+                    .compositingGroup()
+                    .shadow(color: Color(UIColor.systemFill), radius: 5)
+                    .padding()
+                }
             }
         }
         .sheet(isPresented: $showImagePicker, onDismiss: fourierImgTransform) {
@@ -164,8 +181,14 @@ struct DrawView: View {
         URLSession.shared.dataTask(with: request) { data, response, error in
             loading = false
             if let data = data {
-                uiImage = UIImage(data: data)
-                return
+                if let image = UIImage(data: data) {
+                    uiImage = image
+                    return
+                }
+            }
+            recentlyFailed = true
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                self.recentlyFailed = false
             }
             print(error?.localizedDescription ?? "No data")
         }.resume()
