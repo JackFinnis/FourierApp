@@ -31,14 +31,14 @@ struct DrawView: View {
                     Image(uiImage: uiImage!)
                         .resizable()
                         .aspectRatio(contentMode: .fit)
+                        .padding(.vertical, 100)
                 } else if path.isEmpty {
                     Text("Upload a picture of a silhouette or draw a shape with your finger in a closed loop and I will transform it into a Fourier epicycle drawing!")
+                        .padding(.horizontal)
                 } else {
                     path.stroke(Color.accentColor, lineWidth: 4)
                 }
             }
-            .padding(.horizontal)
-            .padding(.vertical, 100)
             .gesture(drawGesture)
             
             VStack {
