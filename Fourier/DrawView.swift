@@ -87,7 +87,7 @@ struct DrawView: View {
                 if uiImage != nil {
                     VStack {
                         HStack {
-                            Text("\(Int(N)*2) Epicycles")
+                            Text("\(Int(N)-1) Epicycles")
                             Spacer()
                             Stepper("", value: $N, in: 1...100, onEditingChanged: { stepping in
                                 if !stepping {
