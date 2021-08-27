@@ -89,7 +89,7 @@ struct DrawView: View {
                         HStack {
                             Text("\(Int(N)-1) Epicycles")
                             Spacer()
-                            Stepper("", value: $N, in: 1...100, onEditingChanged: { stepping in
+                            Stepper("", value: $N, in: 2...200, onEditingChanged: { stepping in
                                 if !stepping {
                                     if selectedImage == nil {
                                         fourierPathTransform()
@@ -100,7 +100,7 @@ struct DrawView: View {
                             })
                         }
                         
-                        Slider(value: $N, in: 1...100, step: 1, onEditingChanged: { sliding in
+                        Slider(value: $N, in: 2...200, step: 1, onEditingChanged: { sliding in
                             if !sliding {
                                 if selectedImage == nil {
                                     fourierPathTransform()
