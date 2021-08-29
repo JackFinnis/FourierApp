@@ -7,12 +7,18 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		04BA915A26DA74EA00014C93 /* ImagePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04BA915926DA74EA00014C93 /* ImagePicker.swift */; };
+		04BA915C26DB80CC00014C93 /* UIImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04BA915B26DB80CC00014C93 /* UIImage.swift */; };
+		04BA915E26DB80FE00014C93 /* Response.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04BA915D26DB80FE00014C93 /* Response.swift */; };
 		04FCE2D226D5046F001D1BE8 /* FourierApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04FCE2D126D5046F001D1BE8 /* FourierApp.swift */; };
 		04FCE2D626D50470001D1BE8 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 04FCE2D526D50470001D1BE8 /* Assets.xcassets */; };
 		04FCE2E126D5146F001D1BE8 /* DrawView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04FCE2E026D5146F001D1BE8 /* DrawView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		04BA915926DA74EA00014C93 /* ImagePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagePicker.swift; sourceTree = "<group>"; };
+		04BA915B26DB80CC00014C93 /* UIImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIImage.swift; sourceTree = "<group>"; };
+		04BA915D26DB80FE00014C93 /* Response.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Response.swift; sourceTree = "<group>"; };
 		04FCE2CE26D5046F001D1BE8 /* Fourier.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Fourier.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		04FCE2D126D5046F001D1BE8 /* FourierApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FourierApp.swift; sourceTree = "<group>"; };
 		04FCE2D526D50470001D1BE8 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -52,6 +58,9 @@
 			children = (
 				04FCE2D126D5046F001D1BE8 /* FourierApp.swift */,
 				04FCE2E026D5146F001D1BE8 /* DrawView.swift */,
+				04BA915926DA74EA00014C93 /* ImagePicker.swift */,
+				04BA915B26DB80CC00014C93 /* UIImage.swift */,
+				04BA915D26DB80FE00014C93 /* Response.swift */,
 				04FCE2D526D50470001D1BE8 /* Assets.xcassets */,
 				04FCE2DA26D50470001D1BE8 /* Info.plist */,
 			);
@@ -126,8 +135,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				04BA915A26DA74EA00014C93 /* ImagePicker.swift in Sources */,
+				04BA915C26DB80CC00014C93 /* UIImage.swift in Sources */,
 				04FCE2D226D5046F001D1BE8 /* FourierApp.swift in Sources */,
 				04FCE2E126D5146F001D1BE8 /* DrawView.swift in Sources */,
+				04BA915E26DB80FE00014C93 /* Response.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

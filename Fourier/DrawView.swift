@@ -6,18 +6,18 @@
 //
 
 import SwiftUI
+import Vision
 
 struct DrawView: View {
-    @State var uiImage: UIImage?
-    @State var path = Path()
+    @State var path: Path?
+    @State var fourierPath: Path?
     
     @State var drawing: Bool = false
     @State var loading: Bool = false
-    @State var recentlySaved: Bool = false
     @State var recentlyFailed: Bool = false
     
-    @State var N: Double = 10.0
-    @State var pathPoints = []
+    @State var N: Double = 2
+    @State var pathPoints = [[CGFloat]]()
     
     @State var selectedImage: UIImage?
     @State var showImagePicker: Bool = false
@@ -92,9 +92,9 @@ struct DrawView: View {
                             Stepper("", value: $N, in: 2...200, onEditingChanged: { stepping in
                                 if !stepping {
                                     if selectedImage == nil {
-                                        fourierPathTransform()
+                                        transformPath()
                                     } else {
-                                        fourierImgTransform()
+                                        transformImage()
                                     }
                                 }
                             })
@@ -103,9 +103,9 @@ struct DrawView: View {
                         Slider(value: $N, in: 2...200, step: 1, onEditingChanged: { sliding in
                             if !sliding {
                                 if selectedImage == nil {
-                                    fourierPathTransform()
+                                    transformPath()
                                 } else {
-                                    fourierImgTransform()
+                                    transformImage()
                                 }
                             }
                         })
@@ -121,7 +121,7 @@ struct DrawView: View {
                 }
             }
         }
-        .sheet(isPresented: $showImagePicker, onDismiss: fourierImgTransform) {
+        .sheet(isPresented: $showImagePicker, onDismiss: transformImage) {
             ImagePicker(image: $selectedImage)
         }
     }
@@ -146,31 +146,57 @@ struct DrawView: View {
                 path.addLine(to: value.location)
             }
             .onEnded { _ in
-                fourierPathTransform()
+                transformPath()
                 drawing = false
             }
     }
     
-    func fourierPathTransform() {
+    func transformPath() {
         if !pathPoints.isEmpty {
-            let json: [String: Any] = ["N": Int(N), "path": pathPoints]
-            getTransform(json: json, urlExtension: "path")
+            getTransform(points: pathPoints)
         }
     }
     
-    func fourierImgTransform() {
-        if let selectedImage = selectedImage {
-            if let imageData = selectedImage.jpegData(compressionQuality: 0) {
-                let json: [String: Any] = ["N": Int(N), "imageData": imageData.base64EncodedString()]
-                getTransform(json: json, urlExtension: "img")
+    func transformImage() {
+        if let points = detectContour() {
+            getTransform(points: points)
+        }
+    }
+    
+    func detectContour() -> [[CGFloat]]? {
+        if let image = selectedImage {
+            let scale = image.size.width / UIScreen.main.bounds.width
+            let scaledWidth = image.size.width * scale
+            let scaledHeight = image.size.height * scale
+            let scaledSize = CGSize(width: scaledWidth, height: scaledHeight)
+            let scaledImage = image.scaleImage(toSize: scaledSize)
+            
+            if let cgImage = scaledImage?.cgImage {
+                let ciImage = CIImage(cgImage: cgImage)
+                let contourRequest = VNDetectContoursRequest()
+                let requestHandler = VNImageRequestHandler(ciImage: ciImage, options: [:])
+                
+                try! requestHandler.perform([contourRequest])
+                let contoursObservation = contourRequest.results?.first as! VNContoursObservation
+                
+                if let contour = contoursObservation.topLevelContours.max(by: { $0.pointCount < $1.pointCount }) {
+                    return contour.normalizedPoints.map { point in
+                        let width = CGFloat(point.x) * image.size.width
+                        let height = CGFloat(point.y) * image.size.height
+                        
+                        return [width, height]
+                    }
+                }
             }
         }
+        return nil
     }
     
-    func getTransform(json: [String: Any], urlExtension: String) {
+    func getTransform(points: [[CGFloat]]) {
         let headers = ["Content-Type": "application/json"]
+        let json: [String: Any] = ["N": Int(N), "path": points]
         let jsonData = try? JSONSerialization.data(withJSONObject: json)
-        let url = URL(string: "https://fourier.finnisjack.repl.co/" + urlExtension)!
+        let url = URL(string: "https://fourier.finnisjack.repl.co")!
         
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
@@ -181,50 +207,41 @@ struct DrawView: View {
         URLSession.shared.dataTask(with: request) { data, response, error in
             loading = false
             if let data = data {
-                if let image = UIImage(data: data) {
-                    uiImage = image
-                    return
+                if let response = try? JSONDecoder().decode(Response.self, from: data) {
+                    path = Path { newPath in
+                        newPath.move(to: CGPoint(x: response.x[0], y: response.y[0]))
+                        for i in 0..<response.x.count {
+                            newPath.addLine(to: CGPoint(x: response.x[i], y: response.y[i]))
+                        }
+                    }
+                    loading = false
                 }
             }
             recentlyFailed = true
             DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
                 self.recentlyFailed = false
             }
-            print(error?.localizedDescription ?? "No data")
         }.resume()
     }
-}
-
-struct ImagePicker: UIViewControllerRepresentable {
-    @Environment(\.presentationMode) var presentationMode
-    @Binding var image: UIImage?
-
-    func makeCoordinator() -> Coordinator {
-        Coordinator(self)
-    }
     
-    func makeUIViewController(context: Context) -> UIImagePickerController {
-        let picker = UIImagePickerController()
-        picker.delegate = context.coordinator
-        return picker
-    }
-
-    func updateUIViewController(_ uiViewController: UIImagePickerController, context: Context) {
-        
-    }
     
-    class Coordinator: NSObject, UINavigationControllerDelegate, UIImagePickerControllerDelegate {
-        let parent: ImagePicker
-
-        init(_ parent: ImagePicker) {
-            self.parent = parent
-        }
-        
-        func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey: Any]) {
-            if let uiImage = info[.originalImage] as? UIImage {
-                parent.image = uiImage
-            }
-            parent.presentationMode.wrappedValue.dismiss()
-        }
-    }
+//    func oldFourierPathTransform() {
+//        if !pathPoints.isEmpty {
+//            let json: [String: Any] = ["N": Int(N), "path": pathPoints]
+//            getTransform(json: json, urlExtension: "path")
+//        }
+//    }
+//
+//    func oldFourierImgTransform() {
+//        if let selectedImage = selectedImage {
+////            let contourPoints = detectContour(image: selectedImage)
+////            let json: [String: Any] = ["N": Int(N), "path": contourPoints]
+////            getTransform(json: json, urlExtension: "")
+//
+//            if let imageData = selectedImage.jpegData(compressionQuality: 0) {
+//                let json: [String: Any] = ["N": Int(N), "imageData": imageData.base64EncodedString()]
+//                getTransform(json: json, urlExtension: "img")
+//            }
+//        }
+//    }
 }
