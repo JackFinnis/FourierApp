@@ -18,12 +18,12 @@ struct DrawView: View {
                     .ignoresSafeArea()
                 
                 if vm.fourierPath != nil {
-                    vm.fourierPath!.stroke(Color.accentColor, lineWidth: 4)
+                    vm.fourierPath!.stroke(Color.accentColor, lineWidth: 3)
                 } else if vm.path.isEmpty {
                     Text("Draw a closed loop over this text with your finger or upload a picture of a silhouette and I will transform it into a Fourier epicycle drawing!")
                         .padding(.horizontal)
                 } else {
-                    vm.path.stroke(Color.accentColor, lineWidth: 4)
+                    vm.path.stroke(Color.accentColor, lineWidth: 3)
                 }
             }
             .gesture(drawGesture)
@@ -38,6 +38,7 @@ struct DrawView: View {
                     HStack {
                         Spacer(minLength: 16)
                         UpdateNBar()
+                            .frame(maxWidth: 450)
                     }
                 }
             }

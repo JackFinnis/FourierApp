@@ -26,18 +26,17 @@ class ViewModel: ObservableObject {
     
     let fourier = Fourier()
     var nRange: ClosedRange<Double> {
-        if contourPoints == nil {
-            if pathPoints.count > 2 {
-                return 2...Double(pathPoints.count)
+        var points: [[Double]] {
+            if contourPoints == nil {
+                return pathPoints
             } else {
-                return 2...3
+                return contourPoints!
             }
+        }
+        if points.count > 2 {
+            return 2...[Double(points.count), 201].min()!
         } else {
-            if contourPoints!.count > 2 {
-                return 2...[Double(contourPoints!.count), 201].min()!
-            } else {
-                return 2...3
-            }
+            return 2...3
         }
     }
     
@@ -75,17 +74,25 @@ class ViewModel: ObservableObject {
             let contoursObservation = contourRequest.results?.first as! VNContoursObservation
             
             if let contour = contoursObservation.topLevelContours.max(by: { $0.pointCount < $1.pointCount }) {
-                let newWidth = UIScreen.main.bounds.width
-                let scale = newWidth / selectedImage!.size.width
-                let newHeight = selectedImage!.size.height * scale
-                let screenHeight = UIScreen.main.bounds.height
-                let heightOffset = (screenHeight - newHeight )/2
+                let oldWidth = selectedImage!.size.width
+                let oldHeight = selectedImage!.size.height
+                let targetWidth = UIScreen.main.bounds.width
+                let targetHeight = UIScreen.main.bounds.height - 50
+                
+                let widthScale = targetWidth / oldWidth
+                let heightScale = targetHeight / oldHeight
+                let scale = widthScale < heightScale ? widthScale : heightScale
+                
+                let newWidth = oldWidth * scale
+                let newHeight = oldHeight * scale
+                
+                let widthOffset = (targetWidth - newWidth)/2
+                let heightOffset = (targetHeight - newHeight)/2
                 
                 contourPoints = contour.normalizedPoints.map { point in
-                    let width = Double(CGFloat(point.x) * newWidth)
-                    let height = Double(CGFloat(point.y) * newHeight + heightOffset)
-                    
-                    return [width, height]
+                    let x = Double(CGFloat(point.x) * newWidth + widthOffset)
+                    let y = Double(CGFloat(point.y) * newHeight + heightOffset)
+                    return [x, y]
                 }
             }
         }

@@ -23,9 +23,8 @@ struct UpdateNBar: View {
                 if !sliding { vm.updatePath() }
             })
         }
-        .frame(maxWidth: 500)
         .padding(.horizontal)
-        .padding(.vertical, 10)
+        .padding(.vertical, 16)
         .background(Color(UIColor.systemBackground))
         .cornerRadius(20)
         .compositingGroup()
