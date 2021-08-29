@@ -3,13 +3,19 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 52;
 	objects = {
 
 /* Begin PBXBuildFile section */
 		04BA915A26DA74EA00014C93 /* ImagePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04BA915926DA74EA00014C93 /* ImagePicker.swift */; };
-		04BA915C26DB80CC00014C93 /* UIImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04BA915B26DB80CC00014C93 /* UIImage.swift */; };
 		04BA915E26DB80FE00014C93 /* Response.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04BA915D26DB80FE00014C93 /* Response.swift */; };
+		04BA916026DB9FE600014C93 /* ViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04BA915F26DB9FE600014C93 /* ViewModel.swift */; };
+		04BA916226DBA0F800014C93 /* PhotoButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04BA916126DBA0F800014C93 /* PhotoButton.swift */; };
+		04BA916426DBA13300014C93 /* UpdateNBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04BA916326DBA13300014C93 /* UpdateNBar.swift */; };
+		04BA916626DBFB4400014C93 /* Fourier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04BA916526DBFB4400014C93 /* Fourier.swift */; };
+		04BA916926DC008900014C93 /* ComplexModule in Frameworks */ = {isa = PBXBuildFile; productRef = 04BA916826DC008900014C93 /* ComplexModule */; };
+		04BA916B26DC008900014C93 /* RealModule in Frameworks */ = {isa = PBXBuildFile; productRef = 04BA916A26DC008900014C93 /* RealModule */; };
+		04BA916D26DC008900014C93 /* Numerics in Frameworks */ = {isa = PBXBuildFile; productRef = 04BA916C26DC008900014C93 /* Numerics */; };
 		04FCE2D226D5046F001D1BE8 /* FourierApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04FCE2D126D5046F001D1BE8 /* FourierApp.swift */; };
 		04FCE2D626D50470001D1BE8 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 04FCE2D526D50470001D1BE8 /* Assets.xcassets */; };
 		04FCE2E126D5146F001D1BE8 /* DrawView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04FCE2E026D5146F001D1BE8 /* DrawView.swift */; };
@@ -17,8 +23,11 @@
 
 /* Begin PBXFileReference section */
 		04BA915926DA74EA00014C93 /* ImagePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagePicker.swift; sourceTree = "<group>"; };
-		04BA915B26DB80CC00014C93 /* UIImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIImage.swift; sourceTree = "<group>"; };
 		04BA915D26DB80FE00014C93 /* Response.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Response.swift; sourceTree = "<group>"; };
+		04BA915F26DB9FE600014C93 /* ViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewModel.swift; sourceTree = "<group>"; };
+		04BA916126DBA0F800014C93 /* PhotoButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoButton.swift; sourceTree = "<group>"; };
+		04BA916326DBA13300014C93 /* UpdateNBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateNBar.swift; sourceTree = "<group>"; };
+		04BA916526DBFB4400014C93 /* Fourier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Fourier.swift; sourceTree = "<group>"; };
 		04FCE2CE26D5046F001D1BE8 /* Fourier.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Fourier.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		04FCE2D126D5046F001D1BE8 /* FourierApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FourierApp.swift; sourceTree = "<group>"; };
 		04FCE2D526D50470001D1BE8 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -31,6 +40,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				04BA916B26DC008900014C93 /* RealModule in Frameworks */,
+				04BA916D26DC008900014C93 /* Numerics in Frameworks */,
+				04BA916926DC008900014C93 /* ComplexModule in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -58,8 +70,11 @@
 			children = (
 				04FCE2D126D5046F001D1BE8 /* FourierApp.swift */,
 				04FCE2E026D5146F001D1BE8 /* DrawView.swift */,
+				04BA916126DBA0F800014C93 /* PhotoButton.swift */,
+				04BA916326DBA13300014C93 /* UpdateNBar.swift */,
+				04BA915F26DB9FE600014C93 /* ViewModel.swift */,
+				04BA916526DBFB4400014C93 /* Fourier.swift */,
 				04BA915926DA74EA00014C93 /* ImagePicker.swift */,
-				04BA915B26DB80CC00014C93 /* UIImage.swift */,
 				04BA915D26DB80FE00014C93 /* Response.swift */,
 				04FCE2D526D50470001D1BE8 /* Assets.xcassets */,
 				04FCE2DA26D50470001D1BE8 /* Info.plist */,
@@ -83,6 +98,11 @@
 			dependencies = (
 			);
 			name = Fourier;
+			packageProductDependencies = (
+				04BA916826DC008900014C93 /* ComplexModule */,
+				04BA916A26DC008900014C93 /* RealModule */,
+				04BA916C26DC008900014C93 /* Numerics */,
+			);
 			productName = Fourier;
 			productReference = 04FCE2CE26D5046F001D1BE8 /* Fourier.app */;
 			productType = "com.apple.product-type.application";
@@ -110,6 +130,9 @@
 				Base,
 			);
 			mainGroup = 04FCE2C526D5046F001D1BE8;
+			packageReferences = (
+				04BA916726DC008800014C93 /* XCRemoteSwiftPackageReference "swift-numerics" */,
+			);
 			productRefGroup = 04FCE2CF26D5046F001D1BE8 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -135,11 +158,14 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				04BA916026DB9FE600014C93 /* ViewModel.swift in Sources */,
 				04BA915A26DA74EA00014C93 /* ImagePicker.swift in Sources */,
-				04BA915C26DB80CC00014C93 /* UIImage.swift in Sources */,
 				04FCE2D226D5046F001D1BE8 /* FourierApp.swift in Sources */,
 				04FCE2E126D5146F001D1BE8 /* DrawView.swift in Sources */,
+				04BA916626DBFB4400014C93 /* Fourier.swift in Sources */,
+				04BA916226DBA0F800014C93 /* PhotoButton.swift in Sources */,
 				04BA915E26DB80FE00014C93 /* Response.swift in Sources */,
+				04BA916426DBA13300014C93 /* UpdateNBar.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -330,6 +356,35 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		04BA916726DC008800014C93 /* XCRemoteSwiftPackageReference "swift-numerics" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/apple/swift-numerics";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.1.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		04BA916826DC008900014C93 /* ComplexModule */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 04BA916726DC008800014C93 /* XCRemoteSwiftPackageReference "swift-numerics" */;
+			productName = ComplexModule;
+		};
+		04BA916A26DC008900014C93 /* RealModule */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 04BA916726DC008800014C93 /* XCRemoteSwiftPackageReference "swift-numerics" */;
+			productName = RealModule;
+		};
+		04BA916C26DC008900014C93 /* Numerics */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 04BA916726DC008800014C93 /* XCRemoteSwiftPackageReference "swift-numerics" */;
+			productName = Numerics;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 04FCE2C626D5046F001D1BE8 /* Project object */;
 }
