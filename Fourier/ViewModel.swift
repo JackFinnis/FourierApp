@@ -102,49 +102,11 @@ class ViewModel: ObservableObject {
         let points = fourier.transform(N: Int(N), points: points)
         fourierPath = Path { newPath in
             newPath.move(to: CGPoint(x: points[0][0], y: points[0][1]))
-            for i in 0..<points.count {
+            for i in 1..<points.count {
                 newPath.addLine(to: CGPoint(x: points[i][0], y: points[i][1]))
             }
             newPath.addLine(to: CGPoint(x: points[0][0], y: points[0][1]))
             newPath.addLine(to: CGPoint(x: points[1][0], y: points[1][1]))
         }
-    }
-    
-    func oldGetTransform(points: [[Double]]) {
-        N = [N, Double(points.count)].min()!
-        
-        let headers = ["Content-Type": "application/json"]
-        let json: [String: Any] = ["N": Int(N), "path": points]
-        let jsonData = try? JSONSerialization.data(withJSONObject: json)
-        let url = URL(string: "https://fourier.finnisjack.repl.co")!
-        
-        var request = URLRequest(url: url)
-        request.httpMethod = "POST"
-        request.httpBody = jsonData
-        request.allHTTPHeaderFields = headers
-        
-        loading = true
-        URLSession.shared.dataTask(with: request) { data, response, error in
-            if let data = data {
-                if let response = try? JSONDecoder().decode(Response.self, from: data) {
-                    let newPath = Path { newPath in
-                        newPath.move(to: CGPoint(x: response.x[0], y: response.y[0]))
-                        for i in 0..<response.x.count {
-                            newPath.addLine(to: CGPoint(x: response.x[i], y: response.y[i]))
-                        }
-                        newPath.addLine(to: CGPoint(x: response.x[0], y: response.y[0]))
-                    }
-                    DispatchQueue.main.async {
-                        self.loading = false
-                        self.fourierPath = newPath
-                    }
-                    return
-                }
-            }
-            DispatchQueue.main.async {
-                self.loading = false
-                self.fail()
-            }
-        }.resume()
     }
 }

@@ -14,8 +14,6 @@
 		04BA916426DBA13300014C93 /* UpdateNBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04BA916326DBA13300014C93 /* UpdateNBar.swift */; };
 		04BA916626DBFB4400014C93 /* Fourier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04BA916526DBFB4400014C93 /* Fourier.swift */; };
 		04BA916926DC008900014C93 /* ComplexModule in Frameworks */ = {isa = PBXBuildFile; productRef = 04BA916826DC008900014C93 /* ComplexModule */; };
-		04BA916B26DC008900014C93 /* RealModule in Frameworks */ = {isa = PBXBuildFile; productRef = 04BA916A26DC008900014C93 /* RealModule */; };
-		04BA916D26DC008900014C93 /* Numerics in Frameworks */ = {isa = PBXBuildFile; productRef = 04BA916C26DC008900014C93 /* Numerics */; };
 		04FCE2D226D5046F001D1BE8 /* FourierApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04FCE2D126D5046F001D1BE8 /* FourierApp.swift */; };
 		04FCE2D626D50470001D1BE8 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 04FCE2D526D50470001D1BE8 /* Assets.xcassets */; };
 		04FCE2E126D5146F001D1BE8 /* DrawView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04FCE2E026D5146F001D1BE8 /* DrawView.swift */; };
@@ -40,8 +38,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				04BA916B26DC008900014C93 /* RealModule in Frameworks */,
-				04BA916D26DC008900014C93 /* Numerics in Frameworks */,
 				04BA916926DC008900014C93 /* ComplexModule in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -100,8 +96,6 @@
 			name = Fourier;
 			packageProductDependencies = (
 				04BA916826DC008900014C93 /* ComplexModule */,
-				04BA916A26DC008900014C93 /* RealModule */,
-				04BA916C26DC008900014C93 /* Numerics */,
 			);
 			productName = Fourier;
 			productReference = 04FCE2CE26D5046F001D1BE8 /* Fourier.app */;
@@ -373,16 +367,6 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 04BA916726DC008800014C93 /* XCRemoteSwiftPackageReference "swift-numerics" */;
 			productName = ComplexModule;
-		};
-		04BA916A26DC008900014C93 /* RealModule */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 04BA916726DC008800014C93 /* XCRemoteSwiftPackageReference "swift-numerics" */;
-			productName = RealModule;
-		};
-		04BA916C26DC008900014C93 /* Numerics */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 04BA916726DC008800014C93 /* XCRemoteSwiftPackageReference "swift-numerics" */;
-			productName = Numerics;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
