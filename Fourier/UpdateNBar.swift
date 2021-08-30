@@ -13,7 +13,7 @@ struct UpdateNBar: View {
     var body: some View {
         VStack {
             HStack {
-                Text("\(Int(vm.N)-1) Epicycles")
+                Text("\(Int(vm.N)-1) Epicycle" + (vm.N == 2 ? "":"s"))
                 Spacer()
                 Stepper("", value: $vm.N, in: vm.nRange, onEditingChanged: { stepping in
                     if !stepping { vm.updatePath() }

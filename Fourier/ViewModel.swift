@@ -16,7 +16,7 @@ class ViewModel: ObservableObject {
     @Published var selectedImage: UIImage?
     @Published var contourPoints: [[Double]]?
     
-    @Published var N: Double = 10
+    @Published var N: Double = 11
     @Published var fourierPath: Path?
     
     @Published var drawing: Bool = false
@@ -77,10 +77,11 @@ class ViewModel: ObservableObject {
                 let oldWidth = selectedImage!.size.width
                 let oldHeight = selectedImage!.size.height
                 let targetWidth = UIScreen.main.bounds.width
-                let targetHeight = UIScreen.main.bounds.height - 50
+                let targetHeight = UIScreen.main.bounds.height
                 
-                let widthScale = targetWidth / oldWidth
-                let heightScale = targetHeight / oldHeight
+                let padding: CGFloat = 50
+                let widthScale = (targetWidth - padding) / oldWidth
+                let heightScale = (targetHeight - padding) / oldHeight
                 let scale = widthScale < heightScale ? widthScale : heightScale
                 
                 let newWidth = oldWidth * scale
