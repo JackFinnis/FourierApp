@@ -12,19 +12,16 @@ class ViewModel: ObservableObject {
     // MARK: - Properties
     @Published var path = Path()
     @Published var pathPoints = [[Double]]()
-    
-    @Published var selectedImage: UIImage?
     @Published var contourPoints: [[Double]]?
     
-    @Published var N: Double = 11
+    @Published var N = 11.0
     @Published var fourierPath: Path?
+    @Published var drawing = false
     
-    @Published var drawing: Bool = false
-    @Published var loading: Bool = false
-    @Published var recentlyFailed: Bool = false
-    @Published var showImagePicker: Bool = false
+    @Published var showInfoView = false
+    @Published var showFailedAlert = false
+    @Published var showImagePicker = false
     
-    let fourier = Fourier()
     var nRange: ClosedRange<Double> {
         var points: [[Double]] {
             if contourPoints == nil {
@@ -43,39 +40,37 @@ class ViewModel: ObservableObject {
     // MARK: - Functions
     func fail() {
         reset()
-        recentlyFailed = true
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-            self.recentlyFailed = false
-        }
+        showFailedAlert = true
+        Haptics.error()
     }
     
     func reset() {
         fourierPath = nil
-        selectedImage = nil
         contourPoints = nil
         path = Path()
     }
     
     func updatePath() {
-        if contourPoints == nil {
-            getTransform(points: pathPoints)
+        if let contourPoints {
+            getTransform(points: contourPoints)
         } else {
-            getTransform(points: contourPoints!)
+            getTransform(points: pathPoints)
         }
     }
     
-    func detectContour() {
-        if let cgImage = selectedImage?.cgImage {
+    func detectContour(image: UIImage) {
+        reset()
+        if let cgImage = image.cgImage {
             let ciImage = CIImage(cgImage: cgImage)
             
             let contourRequest = VNDetectContoursRequest()
             let requestHandler = VNImageRequestHandler(ciImage: ciImage, orientation: .downMirrored)
             try! requestHandler.perform([contourRequest])
-            let contoursObservation = contourRequest.results?.first as! VNContoursObservation
+            let contoursObservation = contourRequest.results!.first!
             
             if let contour = contoursObservation.topLevelContours.max(by: { $0.pointCount < $1.pointCount }) {
-                let oldWidth = selectedImage!.size.width
-                let oldHeight = selectedImage!.size.height
+                let oldWidth = image.size.width
+                let oldHeight = image.size.height
                 let targetWidth = UIScreen.main.bounds.width
                 let targetHeight = UIScreen.main.bounds.height
                 
@@ -98,8 +93,10 @@ class ViewModel: ObservableObject {
             }
         }
         
-        if contourPoints != nil && contourPoints!.count > 1 {
-            getTransform(points: contourPoints!)
+        if let contourPoints, contourPoints.count > 1 {
+            getTransform(points: contourPoints)
+            showImagePicker = false
+            Haptics.tap()
         } else {
             fail()
         }
@@ -107,7 +104,7 @@ class ViewModel: ObservableObject {
     
     func getTransform(points: [[Double]]) {
         N = [N, Double(points.count)].min()!
-        let points = fourier.transform(N: Int(N), points: points)
+        let points = Fourier.transform(N: Int(N), points: points)
         fourierPath = Path { newPath in
             newPath.move(to: CGPoint(x: points[0][0], y: points[0][1]))
             for i in 1..<points.count {

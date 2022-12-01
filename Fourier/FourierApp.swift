@@ -7,6 +7,9 @@
 
 import SwiftUI
 
+let NAME = "Fourier"
+let APP_URL = URL(string: "https://apps.apple.com/app/id1582827502")!
+
 @main
 struct FourierApp: App {
     var body: some Scene {
