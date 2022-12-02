@@ -14,29 +14,47 @@ struct DrawView: View {
     @StateObject var vm = ViewModel()
     
     var body: some View {
-        ZStack(alignment: .bottom) {
-            ZStack {
-                Color(.quaternarySystemFill)
-                    .ignoresSafeArea()
-                
-                if let path = vm.fourierPath {
-                    path.stroke(Color.accentColor, lineWidth: 3)
-                } else {
-                    vm.path.stroke(Color.accentColor, lineWidth: 3)
+        VStack(spacing: 0) {
+            ZStack(alignment: .bottom) {
+                ZStack {
+                    Color(.quaternarySystemFill)
+                        .ignoresSafeArea()
+                    
+                    (vm.fourierPath ?? vm.drawingPath).stroke(Color.accentColor, lineWidth: 3)
                 }
+                .gesture(drawGesture)
+                
+                Group {
+                    if !vm.drawing, let message = vm.infoMessage {
+                        HStack {
+                            Text(message)
+                                .font(.footnote)
+                                .foregroundColor(.secondary)
+                                .fixedSize(horizontal: false, vertical: true)
+                            Spacer(minLength: 0)
+                        }
+                        .padding(.horizontal)
+                        .padding(.vertical, 5)
+                        .background(Color(.systemBackground))
+                        .transition(.move(edge: .bottom).combined(with: .opacity))
+                    }
+                }
+                .animation(.default, value: vm.N)
             }
-            .gesture(drawGesture)
-            
             ActionBar()
         }
+        .fileImporter(isPresented: $vm.showSVGImporter, allowedContentTypes: [.svg], onCompletion: vm.loadSVG)
         .environmentObject(vm)
         .sheet(isPresented: $vm.showImagePicker) {
             ImagePicker() { image in
-                vm.detectContour(image: image)
+                vm.detectContour(in: image)
             }
-            .alert(isPresented: $vm.showFailedAlert) {
-                Alert(title: Text("Oops"), message: Text("I was unable to find a contour in this image. Please select a different silhouette"))
+            .alert(isPresented: $vm.showImageFailedAlert) {
+                Alert(title: Text("Import Failed"), message: Text("I was unable to find a contour in this image. Please select a different silhouette."))
             }
+        }
+        .alert(isPresented: $vm.showSVGFailedAlert) {
+            Alert(title: Text("Import Failed"), message: Text("I was unable to import this svg file. Please select a different file."))
         }
         .sheet(isPresented: $vm.showInfoView, onDismiss: {
             firstLaunch = false
@@ -55,26 +73,26 @@ struct DrawView: View {
     var drawGesture: some Gesture {
         DragGesture(minimumDistance: 0)
             .onChanged { value in
-                let newPoint = [Double(value.location.x), Double(value.location.y)]
+                let newPoint = (Double(value.location.x), Double(value.location.y))
                 
                 if vm.drawing {
-                    vm.pathPoints.append(newPoint)
+                    vm.points.append(newPoint)
                 } else {
                     vm.drawing = true
                     
                     vm.reset()
-                    vm.path.move(to: value.startLocation)
-                    vm.pathPoints = [newPoint]
+                    vm.drawingPath.move(to: value.startLocation)
+                    vm.points = [newPoint]
                     Haptics.tap()
                 }
                 
-                vm.path.addLine(to: value.location)
+                vm.drawingPath.addLine(to: value.location)
             }
             .onEnded { _ in
                 vm.drawing = false
                 
-                if vm.pathPoints.count > 1 {
-                    vm.getTransform(points: vm.pathPoints)
+                if vm.points.count > 1 {
+                    vm.getTransform()
                 } else {
                     vm.fail()
                 }

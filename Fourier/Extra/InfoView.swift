@@ -35,19 +35,19 @@ struct InfoView: View {
                 .horizontallyCentred()
                 
                 Group {
-                    Spacer()
-                    SummaryRow("Draw Fourier Squiggles", description: "Draw a shape with your finger and I will squigglify it", systemName: "pencil.and.outline")
+                    Spacer(minLength: 0)
+                    SummaryRow("Draw Fourier Squiggles", description: "Draw a shape with your finger and I will squigglify it", systemName: "hand.draw")
                     SummaryRow("Import a Silhouette", description: "Convert an image of a silhouette to a squiggle", systemName: "photo")
                     
                     Button {
                         open3b1b()
                     } label: {
-                        SummaryRow("Inspired by 3Blue1Brown", description: "Learn the maths behind the Complex Fourier Series ", systemName: "lightbulb", linkText: "here")
+                        SummaryRow("Inspired by 3Blue1Brown", description: "Learn the maths behind the Complex Fourier Series ", systemName: "function", linkText: "here")
                     }
                     .buttonStyle(.plain)
-                    Spacer()
-                    Spacer()
-                    Spacer()
+                    Spacer(minLength: 0)
+                    Spacer(minLength: 0)
+                    Spacer(minLength: 0)
                 }
                 
                 if firstLaunch {
@@ -72,7 +72,7 @@ struct InfoView: View {
                         Button {
                             showShareSheet = true
                         } label: {
-                            Label("Share with a Friend", systemImage: "person.badge.plus")
+                            Label("Share \(NAME)", systemImage: "square.and.arrow.up")
                         }
                     } label: {
                         Text("Contribute...")
@@ -85,10 +85,19 @@ struct InfoView: View {
             .toolbar {
                 ToolbarItem(placement: .primaryAction) {
                     if !firstLaunch {
-                        Button("Done") {
+                        Button {
                             dismiss()
+                        } label: {
+                            ZStack {
+                                Image(systemName: "circle.fill")
+                                    .foregroundColor(Color(.tertiarySystemFill))
+                                    .font(.title2)
+                                Image(systemName: "xmark")
+                                    .foregroundColor(.secondary)
+                                    .font(.caption2.weight(.heavy))
+                            }
                         }
-                        .font(.body.bold())
+                        .buttonStyle(.plain)
                     }
                 }
                 ToolbarItem(placement: .principal) {

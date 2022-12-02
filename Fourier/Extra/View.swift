@@ -34,4 +34,21 @@ extension View {
             self
         }
     }
+    
+    func snapshot() -> UIImage? {
+        let controller = UIHostingController(rootView: self)
+        guard let view = controller.view else { return nil }
+
+        let targetSize = UIScreen.main.bounds.size
+        view.bounds = CGRect(origin: .zero, size: targetSize)
+        view.backgroundColor = .clear
+        
+        let renderer = UIGraphicsImageRenderer(size: targetSize)
+        let image = renderer.image { _ in
+            view.drawHierarchy(in: UIScreen.main.bounds, afterScreenUpdates: true)
+        }
+        
+        guard let data = image.pngData() else { return nil }
+        return UIImage(data: data)
+    }
 }
