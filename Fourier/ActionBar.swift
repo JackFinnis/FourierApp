@@ -14,7 +14,7 @@ struct ActionBar: View {
     @State var showPermissionAlert = false
     @State var showFailedAlert = false
     
-    var pathShowing: Bool { vm.fourierPath != nil }
+    var pathShowing: Bool { !vm.drawing && vm.fourierPath != nil }
     
     var settingsMenu: some View {
         Menu {
@@ -24,42 +24,51 @@ struct ActionBar: View {
                 Label("About Fourier", systemImage: "info.circle")
             }
             
-            Menu("Import File...") {
-                Button("Example Squiggle") {
+            Button {
+                vm.showSVGImporter = true
+            } label: {
+                Label("Import SVG File", systemImage: "doc")
+            }
+            
+            Button {
+                vm.showImagePicker = true
+            } label: {
+                Label("Import Silhouette", systemImage: "photo")
+            }
+            
+            if !vm.showingExample {
+                Button {
                     vm.showExampleSquiggle()
-                }
-                
-                Button {
-                    vm.showSVGImporter = true
                 } label: {
-                    Label("SVG File", systemImage: "pencil.and.outline")
-                }
-                
-                Button {
-                    vm.showImagePicker = true
-                } label: {
-                    Label("Silhouette Image", systemImage: "photo")
+                    Label("Joseph Fourier", systemImage: "person.fill")
                 }
             }
         } label: {
-            Image(systemName: "ellipsis.circle")
+            Image(systemName: "magnifyingglass")
                 .font(.title2)
         }
     }
     
     var body: some View {
-        VStack(alignment: .leading, spacing: 5) {
+        VStack(alignment: .leading, spacing: 10) {
             if pathShowing {
-                HStack {
-                    ColorPicker(selection: $vm.strokeColour) {
-                        HStack {
-                            Text(Int(vm.N-1).formattedPlural("Epicycle"))
-                            Spacer()
-                            Stepper("", value: $vm.N, in: vm.nRange) { stepping in
-                                if !stepping { vm.transform() }
+                HStack(spacing: 15) {
+                    Text(Int(vm.N-1).formattedPlural("Epicycle"))
+                    Spacer()
+                    Stepper("", value: $vm.N, in: vm.nRange) { stepping in
+                        if !stepping { vm.transform() }
+                    }
+                    .labelsHidden()
+                    ColorPicker("Line Colour", selection: $vm.strokeColour)
+                        .labelsHidden()
+                        .contextMenu {
+                            Button {
+                                vm.strokeColour = .accentColor
+                            } label: {
+                                Label("Reset Colour", systemImage: "arrow.counterclockwise")
                             }
                         }
-                    }
+                    
                     Menu {
                         if pathShowing {
                             if #available(iOS 15, *) {
@@ -94,10 +103,10 @@ struct ActionBar: View {
                                 boldLines.toggle()
                             }
                         } label: {
-                            Label((boldLines ? "Thinner" : "Thicker") + " Lines", systemImage: "lineweight")
+                            Label((boldLines ? "Thinner" : "Thicker") + " Line", systemImage: "lineweight")
                         }
                     } label: {
-                        Image(systemName: "slider.horizontal.3")
+                        Image(systemName: "ellipsis.circle")
                             .font(.title2)
                     }
                     settingsMenu
@@ -107,22 +116,20 @@ struct ActionBar: View {
                 Slider(value: $vm.N, in: vm.nRange, step: 1) { sliding in
                     if !sliding { vm.transform() }
                 }
+                .padding(.bottom, 10)
             } else if !vm.drawing {
-                HStack(alignment: .top) {
+                HStack(alignment: .top, spacing: 0) {
                     Text("Draw a shape in the space above with your finger or upload a picture of a silhouette or an svg file and I will squigglify it!")
                         .font(.subheadline)
                     Spacer(minLength: 10)
                     settingsMenu
-                }
-                .onTapGesture {
-                    vm.showImagePicker = true
                 }
             } else {
                 Rectangle()
                     .foregroundColor(Color(UIColor.systemBackground))
             }
         }
-        .frame(height: 80)
+        .frame(height: 90)
         .padding(.horizontal)
         .background(Color(UIColor.systemBackground).ignoresSafeArea())
         .background(
@@ -133,7 +140,7 @@ struct ActionBar: View {
                     }
                 Text("")
                     .alert(isPresented: $showFailedAlert) {
-                        Alert(title: Text("Save Failed"), message: Text("Please try saving a different drawing."), dismissButton: .default(Text("Ok")))
+                        Alert(title: Text("Save Failed"), message: Text("Please try saving a different drawing."), dismissButton: .default(Text("OK")))
                     }
             }
         )

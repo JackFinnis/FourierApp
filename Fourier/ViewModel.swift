@@ -23,14 +23,16 @@ enum FourierError: String {
 class ViewModel: ObservableObject {
     // MARK: - Properties
     @Published var drawingPath: Path?
-    @Published var drawingPoints = [(Double, Double)]()
+    @Published var drawing = false
     
     @Published var fourierPath: Path?
-    @Published var points = [(Double, Double)]()
-    
+    @Published var points = [CGPoint]()
     @Published var N = 11.0
-    @Published var drawing = false
-    @Published var strokeColour = Color.accentColor
+    
+    @Defaults(key: "components", defaultValue: [CGFloat]()) var components
+    @Published var strokeColour: Color { didSet {
+        components = strokeColour.cgColor?.components ?? []
+    }}
     
     @Published var showInfoView = false
     @Published var showSVGImporter = false
@@ -41,6 +43,7 @@ class ViewModel: ObservableObject {
     
     @Published var savedImage = false
     @Published var copiedCoefficients = false
+    @Published var showingExample = false
     
     var nRange: ClosedRange<Double> {
         2...[[3, Double(points.count)].max()!, 501].min()!
@@ -48,12 +51,17 @@ class ViewModel: ObservableObject {
     var infoMessage: String? {
         switch N {
         case 501:
-            return "Using any more than 500 epicycles makes calculations quite slow!"
+            return points.isEmpty ? nil : "Using more than 500 epicycles makes calculations quite slow!"
         case Double(points.count):
             return "A curve with n points is perfectly approximated using n epicycles."
         default:
             return nil
         }
+    }
+    
+    init() {
+        let components = UserDefaults.standard.object(forKey: "components") as? [CGFloat] ?? [0, 0.5, 1, 1]
+        strokeColour = Color(UIColor(cgColor: CGColor(colorSpace: CGColorSpace(name: CGColorSpace.displayP3)!, components: components) ?? CGColor(red: 0, green: 0.5, blue: 1, alpha: 1)))
     }
     
     // MARK: - Functions
@@ -71,10 +79,15 @@ class ViewModel: ObservableObject {
         drawingPath = nil
         savedImage = false
         copiedCoefficients = false
+        showingExample = false
     }
     
     func showExampleSquiggle() {
-        importSVG(result: Result<URL, Error>.success(SAMPLE_URL))
+        if let url = Bundle.main.url(forResource: "fourier", withExtension: "svg") {
+            showingExample = true
+            importSVG(result: .success(url))
+            showingExample = true
+        }
     }
     
     func importSVG(result: Result<URL, Error>) {
@@ -82,8 +95,10 @@ class ViewModel: ObservableObject {
         case .failure(_):
             fail(error: .downloadSvg)
         case .success(let url):
-            guard url.startAccessingSecurityScopedResource()
-            else { fail(error: .accessSvg); return }
+            if !showingExample {
+                guard url.startAccessingSecurityScopedResource()
+                else { fail(error: .accessSvg); return }
+            }
             
             let svgPaths = SVGBezierPath.pathsFromSVG(at: url)
             url.stopAccessingSecurityScopedResource()
@@ -96,8 +111,8 @@ class ViewModel: ObservableObject {
                 showErrorAlert = true
             }
             
-            let points = Path(svgPath.cgPath).getPoints()
-            newPoints(scale(points), error: .svg)
+            let points = scale(svgPath.cgPath.equallySpacedPoints)
+            newPoints(points, error: .svg)
         }
     }
     
@@ -113,21 +128,22 @@ class ViewModel: ObservableObject {
               let contour = contours.topLevelContours.max(by: { $0.pointCount < $1.pointCount })
         else { fail(error: .contour); return }
         
-        let points = contour.normalizedPoints.map { (Double($0.x), Double($0.y)) }
+        let points = contour.normalizedPoints.map { CGPointMake(CGFloat($0.x), CGFloat($0.y)) }
         newPoints(scale(points), error: .image)
     }
     
-    func scale(_ points: [(Double, Double)]) -> [(Double, Double)] {
-        let xs = points.compactMap { $0.0 }
-        let ys = points.compactMap { $0.1 }
+    func scale(_ points: [CGPoint]) -> [CGPoint] {
+        let xs = points.compactMap { $0.x }
+        let ys = points.compactMap { $0.y }
         
         let minx = xs.min() ?? 0
         let miny = ys.min() ?? 0
         let maxx = xs.max() ?? 0
         let maxy = ys.max() ?? 0
         
-        let shifted = points.map { x, y in
-            (x-minx, y-miny)
+        let transform = CGAffineTransform(translationX: -minx, y: -miny)
+        let shifted = points.map { point in
+            point.applying(transform)
         }
         
         let oldWidth = maxx - minx
@@ -145,12 +161,12 @@ class ViewModel: ObservableObject {
         let widthOffset = (targetWidth - newWidth)/2
         let heightOffset = (targetHeight - newHeight)/2
         
-        return shifted.map { x, y in
-            (x * scale + widthOffset, y * scale + heightOffset)
+        return shifted.map { point in
+            CGPointMake(point.x * scale + widthOffset, point.y * scale + heightOffset)
         }
     }
     
-    func newPoints(_ points: [(Double, Double)], error: FourierError? = nil) {
+    func newPoints(_ points: [CGPoint], error: FourierError? = nil) {
         guard points.count >= 2
         else { fail(error: error); return }
         
@@ -158,6 +174,7 @@ class ViewModel: ObservableObject {
         self.points = points
         transform()
         Haptics.tap()
+        showingExample = false
     }
     
     func transform() {
@@ -166,13 +183,13 @@ class ViewModel: ObservableObject {
         copiedCoefficients = false
         
         let points = Fourier.transform(N: Int(N), points: points)
-        fourierPath = Path { newPath in
-            newPath.move(to: CGPoint(x: points[0].0, y: points[0].1))
+        fourierPath = Path { path in
+            path.move(to: CGPoint(x: points[0].x, y: points[0].y))
             for i in 1..<points.count {
-                newPath.addLine(to: CGPoint(x: points[i].0, y: points[i].1))
+                path.addLine(to: CGPoint(x: points[i].x, y: points[i].y))
             }
-            newPath.addLine(to: CGPoint(x: points[0].0, y: points[0].1))
-            newPath.addLine(to: CGPoint(x: points[1].0, y: points[1].1))
+            path.addLine(to: CGPoint(x: points[0].x, y: points[0].y))
+            path.closeSubpath()
         }
     }
     

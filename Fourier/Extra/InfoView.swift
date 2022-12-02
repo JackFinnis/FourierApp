@@ -34,21 +34,19 @@ struct InfoView: View {
                     }
                 }
                 .horizontallyCentred()
+                .padding(.bottom, 40)
                 
                 Group {
-                    Spacer(minLength: 0)
-                    SummaryRow("Draw Fourier Squiggles", description: "Draw a shape with your finger and I will squigglify it", systemName: "hand.draw")
+                    SummaryRow("Draw Fourier Squiggles", description: "Draw a shape with your finger or stylus and I will squigglify it", systemName: "hand.draw")
                     SummaryRow("Import an SVG File", description: "Convert an svg file or an image of a silhouette to a squiggle", systemName: "photo")
                     
                     Button {
                         open3b1b()
                     } label: {
-                        SummaryRow("Inspired by 3Blue1Brown", description: "Learn the maths behind the Complex Fourier Series ", systemName: "function", linkText: "here")
+                        SummaryRow("Inspired by 3Blue1Brown", description: "Learn the maths behind the complex Fourier series ", systemName: "waveform.path.ecg", linkText: "here")
                     }
                     .buttonStyle(.plain)
-                    Spacer(minLength: 0)
-                    Spacer(minLength: 0)
-                    Spacer(minLength: 0)
+                    Spacer()
                 }
                 
                 if firstLaunch {
@@ -74,7 +72,7 @@ struct InfoView: View {
                         Button {
                             showShareSheet = true
                         } label: {
-                            Label("Share \(NAME)", systemImage: "square.and.arrow.up")
+                            Label("Share \(NAME)...", systemImage: "square.and.arrow.up")
                         }
                     } label: {
                         Text("Contribute...")
@@ -96,7 +94,7 @@ struct InfoView: View {
                                     .font(.title2)
                                 Image(systemName: "xmark")
                                     .foregroundColor(.secondary)
-                                    .font(.caption2.weight(.heavy))
+                                    .font(.caption2.weight(.bold))
                             }
                         }
                         .buttonStyle(.plain)
@@ -112,6 +110,13 @@ struct InfoView: View {
             }
         }
         .shareSheet(url: APP_URL, isPresented: $showShareSheet)
+        .if(firstLaunch) { view in
+            if #available(iOS 15, *) {
+                view.interactiveDismissDisabled()
+            } else {
+                view
+            }
+        }
     }
     
     func dismiss() {

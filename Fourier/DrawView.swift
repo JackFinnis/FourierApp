@@ -16,18 +16,19 @@ struct DrawView: View {
     
     var body: some View {
         VStack(spacing: 0) {
-            ZStack(alignment: .bottom) {
+            ZStack {
                 ZStack {
                     Color(.quaternarySystemFill)
                         .ignoresSafeArea()
                     
                     if let path = vm.drawingPath ?? vm.fourierPath {
-                        path.stroke(vm.strokeColour, lineWidth: boldLines ? 3 : 2)
+                        path.stroke(vm.strokeColour, style: StrokeStyle(lineWidth: boldLines ? 3 : 2, lineCap: .round, lineJoin: .round))
                     }
                 }
                 .gesture(drawGesture)
                 
-                Group {
+                VStack {
+                    Spacer()
                     if !vm.drawing, let message = vm.infoMessage {
                         HStack {
                             Text(message)
@@ -43,20 +44,23 @@ struct DrawView: View {
                     }
                 }
                 .animation(.default, value: vm.N)
+                
+                Text("")
+                    .sheet(isPresented: $vm.showInfoView, onDismiss: {
+                        firstLaunch = false
+                    }) {
+                        InfoView(firstLaunch: firstLaunch)
+                    }
+                Text("")
+                    .sheet(isPresented: $vm.showImagePicker) {
+                        ImagePicker(completion: vm.importImage)
+                    }
             }
             ActionBar()
-                .fileImporter(isPresented: $vm.showSVGImporter, allowedContentTypes: [.svg], onCompletion: vm.importSVG)
         }
-        .sheet(isPresented: $vm.showImagePicker) {
-            ImagePicker(completion: vm.importImage)
-        }
+        .fileImporter(isPresented: $vm.showSVGImporter, allowedContentTypes: [.svg], onCompletion: vm.importSVG)
         .alert(isPresented: $vm.showErrorAlert) {
-            Alert(title: Text("Squigglification Failed"), message: Text(vm.error.rawValue))
-        }
-        .sheet(isPresented: $vm.showInfoView, onDismiss: {
-            firstLaunch = false
-        }) {
-            InfoView(firstLaunch: firstLaunch)
+            Alert(title: Text(vm.error == .multiplePaths ? "SVG Loaded" : "Import Failed"), message: Text(vm.error.rawValue))
         }
         .onAppear {
             if !launchedBefore {
@@ -71,22 +75,21 @@ struct DrawView: View {
     var drawGesture: some Gesture {
         DragGesture(minimumDistance: 0)
             .onChanged { value in
-                let newPoint = (Double(value.location.x), Double(value.location.y))
+                let point = value.location
                 
                 if vm.drawing {
-                    vm.drawingPoints.append(newPoint)
-                    vm.drawingPath?.addLine(to: value.location)
+                    vm.drawingPath?.addLine(to: point)
                 } else {
                     vm.drawing = true
                     vm.drawingPath = Path()
-                    vm.drawingPath?.move(to: value.startLocation)
-                    vm.drawingPoints = [newPoint]
+                    vm.drawingPath?.move(to: point)
                 }
             }
             .onEnded { _ in
                 vm.drawing = false
+                let points = vm.drawingPath?.cgPath.equallySpacedPoints ?? []
+                vm.newPoints(points)
                 vm.drawingPath = nil
-                vm.newPoints(vm.drawingPoints)
             }
     }
 }

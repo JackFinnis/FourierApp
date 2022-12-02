@@ -15,11 +15,8 @@ extension CGPath {
         }
         return points
     }
-}
-
-extension Path {
-    func getPoints() -> [(Double, Double)] {
-        let dashed = cgPath.copy(dashingWithPhase: 0, lengths: [5])
-        return dashed.points.map { ($0.x, $0.y) }
+    
+    var equallySpacedPoints: [CGPoint] {
+        copy(dashingWithPhase: 0, lengths: [10]).points
     }
 }

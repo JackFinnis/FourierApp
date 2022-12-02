@@ -7,6 +7,7 @@
 
 import Foundation
 import ComplexModule
+import SwiftUI
 
 struct Fourier {
     static func integrand(path: [Complex<Double>], t: Int, n: Int) -> Complex<Double> {
@@ -49,15 +50,15 @@ struct Fourier {
         return approx
     }
     
-    static func transform(N: Int, points: [(Double, Double)]) -> [(Double, Double)] {
-        let path = points.map { Complex($0.0, $0.1) }
+    static func transform(N: Int, points: [CGPoint]) -> [CGPoint] {
+        let path = points.map { Complex(Double($0.x), Double($0.y)) }
         let cs = getCs(N: N, path: path)
         let approx = getApprox(N: N, path: path, cs: cs)
-        return approx.map { ($0.real, $0.imaginary) }
+        return approx.map { CGPointMake($0.real, $0.imaginary) }
     }
     
-    static func getCoefficients(N: Int, points: [(Double, Double)]) -> [(Int, Double, Double)] {
-        let path = points.map { Complex($0.0, $0.1) }
+    static func getCoefficients(N: Int, points: [CGPoint]) -> [(Int, Double, Double)] {
+        let path = points.map { Complex(Double($0.x), Double($0.y)) }
         let cs = getCs(N: N, path: path)
         return cs.map { n, c in
             let r = c.real
