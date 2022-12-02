@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct InfoView: View {
+    @EnvironmentObject var vm: ViewModel
     @Environment(\.presentationMode) var presentationMode
     @State var showShareSheet = false
     
@@ -37,7 +38,7 @@ struct InfoView: View {
                 Group {
                     Spacer(minLength: 0)
                     SummaryRow("Draw Fourier Squiggles", description: "Draw a shape with your finger and I will squigglify it", systemName: "hand.draw")
-                    SummaryRow("Import a Silhouette", description: "Convert an image of a silhouette to a squiggle", systemName: "photo")
+                    SummaryRow("Import an SVG File", description: "Convert an svg file or an image of a silhouette to a squiggle", systemName: "photo")
                     
                     Button {
                         open3b1b()
@@ -52,9 +53,10 @@ struct InfoView: View {
                 
                 if firstLaunch {
                     Button {
+                        vm.showExampleSquiggle()
                         dismiss()
                     } label: {
-                        Text("Start Drawing!")
+                        Text("See Example")
                             .bigButton()
                     }
                 } else {

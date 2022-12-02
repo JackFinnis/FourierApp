@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct ImagePicker: UIViewControllerRepresentable {
-    let completion: (UIImage) -> Void
+    let completion: (UIImage?) -> Void
     
     func makeCoordinator() -> Coordinator {
         Coordinator(completion)
@@ -23,16 +23,15 @@ struct ImagePicker: UIViewControllerRepresentable {
     func updateUIViewController(_ uiViewController: UIImagePickerController, context: Context) {}
     
     class Coordinator: NSObject, UINavigationControllerDelegate, UIImagePickerControllerDelegate {
-        let completion: (UIImage) -> Void
+        let completion: (UIImage?) -> Void
         
-        init(_ completion: @escaping (UIImage) -> Void) {
+        init(_ completion: @escaping (UIImage?) -> Void) {
             self.completion = completion
         }
         
         func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey: Any]) {
-            if let image = info[.originalImage] as? UIImage {
-                completion(image)
-            }
+            completion(info[.originalImage] as? UIImage)
+            picker.dismiss(animated: true)
         }
     }
 }

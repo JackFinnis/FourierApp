@@ -10,6 +10,7 @@ import Vision
 
 struct DrawView: View {
     @AppStorage("launchedBefore") var launchedBefore = false
+    @AppStorage("boldLines") var boldLines = true
     @State var firstLaunch = false
     @StateObject var vm = ViewModel()
     
@@ -20,7 +21,9 @@ struct DrawView: View {
                     Color(.quaternarySystemFill)
                         .ignoresSafeArea()
                     
-                    (vm.fourierPath ?? vm.drawingPath).stroke(Color.accentColor, lineWidth: 3)
+                    if let path = vm.drawingPath ?? vm.fourierPath {
+                        path.stroke(vm.strokeColour, lineWidth: boldLines ? 3 : 2)
+                    }
                 }
                 .gesture(drawGesture)
                 
@@ -42,19 +45,13 @@ struct DrawView: View {
                 .animation(.default, value: vm.N)
             }
             ActionBar()
+                .fileImporter(isPresented: $vm.showSVGImporter, allowedContentTypes: [.svg], onCompletion: vm.importSVG)
         }
-        .fileImporter(isPresented: $vm.showSVGImporter, allowedContentTypes: [.svg], onCompletion: vm.loadSVG)
-        .environmentObject(vm)
         .sheet(isPresented: $vm.showImagePicker) {
-            ImagePicker() { image in
-                vm.detectContour(in: image)
-            }
-            .alert(isPresented: $vm.showImageFailedAlert) {
-                Alert(title: Text("Import Failed"), message: Text("I was unable to find a contour in this image. Please select a different silhouette."))
-            }
+            ImagePicker(completion: vm.importImage)
         }
-        .alert(isPresented: $vm.showSVGFailedAlert) {
-            Alert(title: Text("Import Failed"), message: Text("I was unable to import this svg file. Please select a different file."))
+        .alert(isPresented: $vm.showErrorAlert) {
+            Alert(title: Text("Squigglification Failed"), message: Text(vm.error.rawValue))
         }
         .sheet(isPresented: $vm.showInfoView, onDismiss: {
             firstLaunch = false
@@ -68,6 +65,7 @@ struct DrawView: View {
                 vm.showInfoView = true
             }
         }
+        .environmentObject(vm)
     }
     
     var drawGesture: some Gesture {
@@ -76,26 +74,19 @@ struct DrawView: View {
                 let newPoint = (Double(value.location.x), Double(value.location.y))
                 
                 if vm.drawing {
-                    vm.points.append(newPoint)
+                    vm.drawingPoints.append(newPoint)
+                    vm.drawingPath?.addLine(to: value.location)
                 } else {
                     vm.drawing = true
-                    
-                    vm.reset()
-                    vm.drawingPath.move(to: value.startLocation)
-                    vm.points = [newPoint]
-                    Haptics.tap()
+                    vm.drawingPath = Path()
+                    vm.drawingPath?.move(to: value.startLocation)
+                    vm.drawingPoints = [newPoint]
                 }
-                
-                vm.drawingPath.addLine(to: value.location)
             }
             .onEnded { _ in
                 vm.drawing = false
-                
-                if vm.points.count > 1 {
-                    vm.getTransform()
-                } else {
-                    vm.fail()
-                }
+                vm.drawingPath = nil
+                vm.newPoints(vm.drawingPoints)
             }
     }
 }

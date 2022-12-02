@@ -9,72 +9,112 @@ import SwiftUI
 import Vision
 import PocketSVG
 
+enum FourierError: String {
+    case downloadSvg = "I was unable to import this svg file. Please ensure it is downloaded from iCloud and try again."
+    case accessSvg = "I was unable to access this svg file. Please ensure you have sufficient permission and try again."
+    case parseSvg = "I was unable to parse this svg file. Please ensure it is in a valid format and try again."
+    case svg = "I was unable to squigglify this svg file. Please try using a different file."
+    case multiplePaths = "This svg file has multiple paths. Only the first will be displayed."
+    case image = "I was unable to squigglify this silhouette. Please try using a different image."
+    case contour = "I was unable to find a contour in this silhouette. Please try using a different image."
+    case loadImage = "I was unable to import this image. Please ensure it is downloaded from iCloud and try again."
+}
+
 class ViewModel: ObservableObject {
     // MARK: - Properties
-    @Published var drawingPath = Path()
+    @Published var drawingPath: Path?
+    @Published var drawingPoints = [(Double, Double)]()
+    
+    @Published var fourierPath: Path?
     @Published var points = [(Double, Double)]()
     
     @Published var N = 11.0
-    @Published var fourierPath: Path?
     @Published var drawing = false
+    @Published var strokeColour = Color.accentColor
     
     @Published var showInfoView = false
-    @Published var showSVGFailedAlert = false
     @Published var showSVGImporter = false
-    @Published var showImageFailedAlert = false
     @Published var showImagePicker = false
+    
+    @Published var showErrorAlert = false
+    @Published var error = FourierError.image
     
     @Published var savedImage = false
     @Published var copiedCoefficients = false
-    @Published var infoMessage: String?
     
     var nRange: ClosedRange<Double> {
-        if points.count > 2 {
-            return 2...[Double(points.count), 501].min()!
-        } else {
-            return 2...3
+        2...[[3, Double(points.count)].max()!, 501].min()!
+    }
+    var infoMessage: String? {
+        switch N {
+        case 501:
+            return "Using any more than 500 epicycles makes calculations quite slow!"
+        case Double(points.count):
+            return "A curve with n points is perfectly approximated using n epicycles."
+        default:
+            return nil
         }
     }
     
     // MARK: - Functions
-    func fail() {
-        reset()
-        Haptics.error()
+    func fail(error: FourierError? = nil) {
+        if let error {
+            Haptics.error()
+            self.error = error
+            showErrorAlert = true
+        }
     }
     
     func reset() {
         points = []
         fourierPath = nil
-        drawingPath = Path()
+        drawingPath = nil
+        savedImage = false
+        copiedCoefficients = false
     }
     
-    func loadSVG(result: Result<URL, Error>) {
-        func failSVG() {
-            showSVGFailedAlert = true
-            fail()
-        }
-        
+    func showExampleSquiggle() {
+        importSVG(result: Result<URL, Error>.success(SAMPLE_URL))
+    }
+    
+    func importSVG(result: Result<URL, Error>) {
         switch result {
         case .failure(_):
-            failSVG()
+            fail(error: .downloadSvg)
         case .success(let url):
             guard url.startAccessingSecurityScopedResource()
-            else { failSVG(); return }
+            else { fail(error: .accessSvg); return }
             
             let svgPaths = SVGBezierPath.pathsFromSVG(at: url)
             url.stopAccessingSecurityScopedResource()
             
-            if let svgPath = svgPaths.first {
-                let points = Path(svgPath.cgPath).getPoints()
-                self.points = scale(points)
-                print(self.points[100])
-                print(self.points[200])
-                print(self.points[300])
-                getTransform()
-            } else {
-                failSVG()
+            guard let svgPath = svgPaths.first
+            else { fail(error: .parseSvg); return }
+            
+            if svgPaths.count > 1 {
+                error = .multiplePaths
+                showErrorAlert = true
             }
+            
+            let points = Path(svgPath.cgPath).getPoints()
+            newPoints(scale(points), error: .svg)
         }
+    }
+    
+    func importImage(image: UIImage?) {
+        guard let cgImage = image?.cgImage
+        else { fail(error: .loadImage); return }
+        
+        let contourRequest = VNDetectContoursRequest()
+        let requestHandler = VNImageRequestHandler(ciImage: CIImage(cgImage: cgImage), orientation: .downMirrored)
+        try? requestHandler.perform([contourRequest])
+        
+        guard let contours = contourRequest.results?.first,
+              let contour = contours.topLevelContours.max(by: { $0.pointCount < $1.pointCount })
+        else { fail(error: .contour); return }
+        
+        let points = contour.normalizedPoints.map { (Double($0.x), Double($0.y)) }
+        newPoints(scale(points), error: .image)
     }
     
     func scale(_ points: [(Double, Double)]) -> [(Double, Double)] {
@@ -93,7 +133,7 @@ class ViewModel: ObservableObject {
         let oldWidth = maxx - minx
         let oldHeight = maxy - miny
         let targetWidth = UIScreen.main.bounds.width
-        let targetHeight = UIScreen.main.bounds.height - 80
+        let targetHeight = UIScreen.main.bounds.height - 150
         
         let padding: CGFloat = 50
         let widthScale = (targetWidth - padding) / oldWidth
@@ -110,47 +150,21 @@ class ViewModel: ObservableObject {
         }
     }
     
-    func detectContour(in image: UIImage) {
-        reset()
-        if let cgImage = image.cgImage {
-            let ciImage = CIImage(cgImage: cgImage)
-            
-            let contourRequest = VNDetectContoursRequest()
-            let requestHandler = VNImageRequestHandler(ciImage: ciImage, orientation: .downMirrored)
-            try! requestHandler.perform([contourRequest])
-            let contoursObservation = contourRequest.results!.first!
-            
-            if let contour = contoursObservation.topLevelContours.max(by: { $0.pointCount < $1.pointCount }) {
-                let points = contour.normalizedPoints.map { (Double($0.x), Double($0.y)) }
-                self.points = scale(points)
-                print(points.count)
-                getTransform()
-            }
-        }
+    func newPoints(_ points: [(Double, Double)], error: FourierError? = nil) {
+        guard points.count >= 2
+        else { fail(error: error); return }
         
-        if points.count > 1 {
-            getTransform()
-            showImagePicker = false
-            Haptics.tap()
-        } else {
-            fail()
-            showImageFailedAlert = true
-        }
+        reset()
+        self.points = points
+        transform()
+        Haptics.tap()
     }
     
-    func getTransform() {
+    func transform() {
+        N = [N, Double(points.count)].min()!
         savedImage = false
         copiedCoefficients = false
-        switch N {
-        case 501:
-            infoMessage = "Using any more than 500 epicycles makes calculations quite slow!"
-        case Double(points.count):
-            infoMessage = "A curve with n points is perfectly approximated using n epicycles."
-        default:
-            infoMessage = nil
-        }
         
-        N = [N, Double(points.count)].min()!
         let points = Fourier.transform(N: Int(N), points: points)
         fourierPath = Path { newPath in
             newPath.move(to: CGPoint(x: points[0].0, y: points[0].1))
@@ -164,6 +178,7 @@ class ViewModel: ObservableObject {
     
     func copyCoefficients() {
         let coefficients = Fourier.getCoefficients(N: Int(N), points: points)
+        
         var string = "rotations per second (anticlockwise),radius,initial angle (radians)\n"
         string += coefficients.map { n, r, a in
             "\(n),\(r),\(a)"

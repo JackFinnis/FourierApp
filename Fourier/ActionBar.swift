@@ -10,12 +10,13 @@ import Photos
 
 struct ActionBar: View {
     @EnvironmentObject var vm: ViewModel
+    @AppStorage("boldLines") var boldLines = true
     @State var showPermissionAlert = false
     @State var showFailedAlert = false
     
     var pathShowing: Bool { vm.fourierPath != nil }
     
-    var menu: some View {
+    var settingsMenu: some View {
         Menu {
             Button {
                 vm.showInfoView = true
@@ -23,44 +24,22 @@ struct ActionBar: View {
                 Label("About Fourier", systemImage: "info.circle")
             }
             
-            if pathShowing {
-                if #available(iOS 15, *) {
-                    Button(role: .destructive) {
-                        vm.reset()
-                    } label: {
-                        Label("Reset", systemImage: "xmark")
-                    }
-                } else {
-                    Button {
-                        vm.reset()
-                    } label: {
-                        Label("Reset", systemImage: "xmark")
-                    }
+            Menu("Import File...") {
+                Button("Example Squiggle") {
+                    vm.showExampleSquiggle()
                 }
                 
                 Button {
-                    vm.copyCoefficients()
+                    vm.showSVGImporter = true
                 } label: {
-                    Label(vm.copiedCoefficients ? "Copied Coefficients" : "Copy Coefficients", systemImage: vm.copiedCoefficients ? "checkmark.circle.fill" : "doc.on.doc")
+                    Label("SVG File", systemImage: "pencil.and.outline")
                 }
-                .disabled(vm.copiedCoefficients)
                 
-                Button(action: saveImage) {
-                    Label(vm.savedImage ? "Saved to Photos" : "Save to Photos", systemImage: vm.savedImage ? "checkmark.circle.fill" : "square.and.arrow.down")
+                Button {
+                    vm.showImagePicker = true
+                } label: {
+                    Label("Silhouette Image", systemImage: "photo")
                 }
-                .disabled(vm.savedImage)
-            }
-            
-            Button {
-                vm.showSVGImporter = true
-            } label: {
-                Label("Import SVG File", systemImage: "pencil.and.outline")
-            }
-            
-            Button {
-                vm.showImagePicker = true
-            } label: {
-                Label("Import Silhouette", systemImage: "photo")
             }
         } label: {
             Image(systemName: "ellipsis.circle")
@@ -72,24 +51,68 @@ struct ActionBar: View {
         VStack(alignment: .leading, spacing: 5) {
             if pathShowing {
                 HStack {
-                    Text(Int(vm.N-1).formattedPlural("Epicycle"))
-                    Spacer()
-                    Stepper("", value: $vm.N, in: vm.nRange) { stepping in
-                        if !stepping { vm.getTransform() }
+                    ColorPicker(selection: $vm.strokeColour) {
+                        HStack {
+                            Text(Int(vm.N-1).formattedPlural("Epicycle"))
+                            Spacer()
+                            Stepper("", value: $vm.N, in: vm.nRange) { stepping in
+                                if !stepping { vm.transform() }
+                            }
+                        }
                     }
-                    menu
+                    Menu {
+                        if pathShowing {
+                            if #available(iOS 15, *) {
+                                Button(role: .destructive) {
+                                    vm.reset()
+                                } label: {
+                                    Label("Reset", systemImage: "xmark")
+                                }
+                            } else {
+                                Button {
+                                    vm.reset()
+                                } label: {
+                                    Label("Reset", systemImage: "xmark")
+                                }
+                            }
+                            
+                            Button {
+                                vm.copyCoefficients()
+                            } label: {
+                                Label(vm.copiedCoefficients ? "Copied Coefficients" : "Copy Coefficients", systemImage: vm.copiedCoefficients ? "checkmark.circle.fill" : "doc.on.doc")
+                            }
+                            .disabled(vm.copiedCoefficients)
+                            
+                            Button(action: saveImage) {
+                                Label(vm.savedImage ? "Saved to Photos" : "Save to Photos", systemImage: vm.savedImage ? "checkmark.circle.fill" : "square.and.arrow.down")
+                            }
+                            .disabled(vm.savedImage)
+                        }
+                        
+                        Button {
+                            withAnimation {
+                                boldLines.toggle()
+                            }
+                        } label: {
+                            Label((boldLines ? "Thinner" : "Thicker") + " Lines", systemImage: "lineweight")
+                        }
+                    } label: {
+                        Image(systemName: "slider.horizontal.3")
+                            .font(.title2)
+                    }
+                    settingsMenu
                 }
                 .padding(.top, 10)
                 
                 Slider(value: $vm.N, in: vm.nRange, step: 1) { sliding in
-                    if !sliding { vm.getTransform() }
+                    if !sliding { vm.transform() }
                 }
-            } else if vm.drawingPath.isEmpty {
+            } else if !vm.drawing {
                 HStack(alignment: .top) {
-                    Text("Draw a shape in the space above with your finger or upload a picture of a silhouette and I will squigglify it!")
+                    Text("Draw a shape in the space above with your finger or upload a picture of a silhouette or an svg file and I will squigglify it!")
                         .font(.subheadline)
                     Spacer(minLength: 10)
-                    menu
+                    settingsMenu
                 }
                 .onTapGesture {
                     vm.showImagePicker = true
