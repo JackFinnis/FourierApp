@@ -149,7 +149,7 @@ class ViewModel: ObservableObject {
         let oldWidth = maxx - minx
         let oldHeight = maxy - miny
         let targetWidth = UIScreen.main.bounds.width
-        let targetHeight = UIScreen.main.bounds.height - 150
+        let targetHeight = UIScreen.main.bounds.height - 140
         
         let padding: CGFloat = 50
         let widthScale = (targetWidth - padding) / oldWidth

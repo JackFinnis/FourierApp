@@ -119,7 +119,7 @@ struct ActionBar: View {
                 .padding(.bottom, 10)
             } else if !vm.drawing {
                 HStack(alignment: .top, spacing: 0) {
-                    Text("Draw a shape in the space above with your finger or upload a picture of a silhouette or an svg file and I will squigglify it!")
+                    Text("Draw a shape in the space above with your finger or stylus or upload a picture of a silhouette or an svg file and I will squigglify it!")
                         .font(.subheadline)
                     Spacer(minLength: 10)
                     settingsMenu
