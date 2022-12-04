@@ -18,7 +18,7 @@
 		04B5F3B12938F4F50088A0D9 /* Haptics.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04B5F3A92938F4F50088A0D9 /* Haptics.swift */; };
 		04B5F3B22938F4F50088A0D9 /* InfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04B5F3AA2938F4F50088A0D9 /* InfoView.swift */; };
 		04B5F3B7293957A60088A0D9 /* PocketSVG in Frameworks */ = {isa = PBXBuildFile; productRef = 04B5F3B6293957A60088A0D9 /* PocketSVG */; };
-		04B5F3B9293965F60088A0D9 /* Path.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04B5F3B8293965F60088A0D9 /* Path.swift */; };
+		04B5F3B9293965F60088A0D9 /* CGPath.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04B5F3B8293965F60088A0D9 /* CGPath.swift */; };
 		04B5F3BB293A16520088A0D9 /* fourier.svg in Resources */ = {isa = PBXBuildFile; fileRef = 04B5F3BA293A16520088A0D9 /* fourier.svg */; };
 		04B5F3BD293A74690088A0D9 /* Defaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04B5F3BC293A74690088A0D9 /* Defaults.swift */; };
 		04BA915A26DA74EA00014C93 /* ImagePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04BA915926DA74EA00014C93 /* ImagePicker.swift */; };
@@ -42,7 +42,7 @@
 		04B5F3A72938F4F40088A0D9 /* Store.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Store.swift; sourceTree = "<group>"; };
 		04B5F3A92938F4F50088A0D9 /* Haptics.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Haptics.swift; sourceTree = "<group>"; };
 		04B5F3AA2938F4F50088A0D9 /* InfoView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InfoView.swift; sourceTree = "<group>"; };
-		04B5F3B8293965F60088A0D9 /* Path.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Path.swift; sourceTree = "<group>"; };
+		04B5F3B8293965F60088A0D9 /* CGPath.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CGPath.swift; sourceTree = "<group>"; };
 		04B5F3BA293A16520088A0D9 /* fourier.svg */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = fourier.svg; sourceTree = "<group>"; };
 		04B5F3BC293A74690088A0D9 /* Defaults.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Defaults.swift; sourceTree = "<group>"; };
 		04BA915926DA74EA00014C93 /* ImagePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagePicker.swift; sourceTree = "<group>"; };
@@ -69,25 +69,39 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		04B5F3872938BB570088A0D9 /* Extra */ = {
+		04A65580293D436E0084CC6A /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
-				04BA916526DBFB4400014C93 /* Fourier.swift */,
-				04B5F3A32938F4F40088A0D9 /* DraggableBar.swift */,
-				04B5F3A92938F4F50088A0D9 /* Haptics.swift */,
-				04B5F3A62938F4F40088A0D9 /* ShareView.swift */,
-				04B5F3A72938F4F40088A0D9 /* Store.swift */,
-				04B5F3AA2938F4F50088A0D9 /* InfoView.swift */,
-				04BA915926DA74EA00014C93 /* ImagePicker.swift */,
-				04B5F3BC293A74690088A0D9 /* Defaults.swift */,
-				04B5F3A52938F4F40088A0D9 /* View.swift */,
-				04B5F3B8293965F60088A0D9 /* Path.swift */,
 				04B5F3892938C1AE0088A0D9 /* Int.swift */,
+				04B5F3B8293965F60088A0D9 /* CGPath.swift */,
+				04B5F3A52938F4F40088A0D9 /* View.swift */,
 				04A6557A293D1FA30084CC6A /* String.swift */,
-				04A6557C293D1FD40084CC6A /* Emails.swift */,
 				04A6557E293D24450084CC6A /* Collection.swift */,
 			);
-			path = Extra;
+			path = Extensions;
+			sourceTree = "<group>";
+		};
+		04A65581293D43A70084CC6A /* Helpers */ = {
+			isa = PBXGroup;
+			children = (
+				04B5F3A92938F4F50088A0D9 /* Haptics.swift */,
+				04BA916526DBFB4400014C93 /* Fourier.swift */,
+				04B5F3A72938F4F40088A0D9 /* Store.swift */,
+				04B5F3BC293A74690088A0D9 /* Defaults.swift */,
+				04A6557C293D1FD40084CC6A /* Emails.swift */,
+			);
+			path = Helpers;
+			sourceTree = "<group>";
+		};
+		04B5F3872938BB570088A0D9 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				04B5F3A32938F4F40088A0D9 /* DraggableBar.swift */,
+				04B5F3A62938F4F40088A0D9 /* ShareView.swift */,
+				04B5F3AA2938F4F50088A0D9 /* InfoView.swift */,
+				04BA915926DA74EA00014C93 /* ImagePicker.swift */,
+			);
+			path = Views;
 			sourceTree = "<group>";
 		};
 		04B5F3882938BBA70088A0D9 /* Resources */ = {
@@ -123,7 +137,9 @@
 				04FCE2E026D5146F001D1BE8 /* DrawView.swift */,
 				04BA916326DBA13300014C93 /* ActionBar.swift */,
 				04BA915F26DB9FE600014C93 /* ViewModel.swift */,
-				04B5F3872938BB570088A0D9 /* Extra */,
+				04B5F3872938BB570088A0D9 /* Views */,
+				04A65581293D43A70084CC6A /* Helpers */,
+				04A65580293D436E0084CC6A /* Extensions */,
 				04B5F3882938BBA70088A0D9 /* Resources */,
 			);
 			path = Fourier;
@@ -216,7 +232,7 @@
 				04FCE2D226D5046F001D1BE8 /* FourierApp.swift in Sources */,
 				04B5F3AB2938F4F50088A0D9 /* DraggableBar.swift in Sources */,
 				04A6557F293D24450084CC6A /* Collection.swift in Sources */,
-				04B5F3B9293965F60088A0D9 /* Path.swift in Sources */,
+				04B5F3B9293965F60088A0D9 /* CGPath.swift in Sources */,
 				04FCE2E126D5146F001D1BE8 /* DrawView.swift in Sources */,
 				04B5F3B22938F4F50088A0D9 /* InfoView.swift in Sources */,
 				04BA916626DBFB4400014C93 /* Fourier.swift in Sources */,
