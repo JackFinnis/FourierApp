@@ -8,9 +8,19 @@
 import SwiftUI
 import Vision
 
+struct Line: View {
+    @AppStorage("boldLines") var boldLines = true
+    @EnvironmentObject var vm: ViewModel
+    
+    var body: some View {
+        if let path = vm.drawingPath ?? vm.fourierPath {
+            path.stroke(vm.strokeColour, style: StrokeStyle(lineWidth: boldLines ? 3 : 2, lineCap: .round, lineJoin: .round))
+        }
+    }
+}
+
 struct DrawView: View {
     @AppStorage("launchedBefore") var launchedBefore = false
-    @AppStorage("boldLines") var boldLines = true
     @State var firstLaunch = false
     @StateObject var vm = ViewModel()
     
@@ -20,10 +30,7 @@ struct DrawView: View {
                 ZStack {
                     Color(.quaternarySystemFill)
                         .ignoresSafeArea()
-                    
-                    if let path = vm.drawingPath ?? vm.fourierPath {
-                        path.stroke(vm.strokeColour, style: StrokeStyle(lineWidth: boldLines ? 3 : 2, lineCap: .round, lineJoin: .round))
-                    }
+                    Line()
                 }
                 .gesture(drawGesture)
                 

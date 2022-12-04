@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		04A6557B293D1FA30084CC6A /* String.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04A6557A293D1FA30084CC6A /* String.swift */; };
+		04A6557D293D1FD40084CC6A /* Emails.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04A6557C293D1FD40084CC6A /* Emails.swift */; };
+		04A6557F293D24450084CC6A /* Collection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04A6557E293D24450084CC6A /* Collection.swift */; };
 		04B5F38A2938C1AE0088A0D9 /* Int.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04B5F3892938C1AE0088A0D9 /* Int.swift */; };
 		04B5F3AB2938F4F50088A0D9 /* DraggableBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04B5F3A32938F4F40088A0D9 /* DraggableBar.swift */; };
 		04B5F3AD2938F4F50088A0D9 /* View.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04B5F3A52938F4F40088A0D9 /* View.swift */; };
@@ -29,6 +32,9 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		04A6557A293D1FA30084CC6A /* String.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = String.swift; sourceTree = "<group>"; };
+		04A6557C293D1FD40084CC6A /* Emails.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Emails.swift; sourceTree = "<group>"; };
+		04A6557E293D24450084CC6A /* Collection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Collection.swift; sourceTree = "<group>"; };
 		04B5F3892938C1AE0088A0D9 /* Int.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Int.swift; sourceTree = "<group>"; };
 		04B5F3A32938F4F40088A0D9 /* DraggableBar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DraggableBar.swift; sourceTree = "<group>"; };
 		04B5F3A52938F4F40088A0D9 /* View.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = View.swift; sourceTree = "<group>"; };
@@ -77,6 +83,9 @@
 				04B5F3A52938F4F40088A0D9 /* View.swift */,
 				04B5F3B8293965F60088A0D9 /* Path.swift */,
 				04B5F3892938C1AE0088A0D9 /* Int.swift */,
+				04A6557A293D1FA30084CC6A /* String.swift */,
+				04A6557C293D1FD40084CC6A /* Emails.swift */,
+				04A6557E293D24450084CC6A /* Collection.swift */,
 			);
 			path = Extra;
 			sourceTree = "<group>";
@@ -201,16 +210,19 @@
 				04BA916026DB9FE600014C93 /* ViewModel.swift in Sources */,
 				04BA915A26DA74EA00014C93 /* ImagePicker.swift in Sources */,
 				04B5F3AE2938F4F50088A0D9 /* ShareView.swift in Sources */,
+				04A6557D293D1FD40084CC6A /* Emails.swift in Sources */,
 				04B5F3AF2938F4F50088A0D9 /* Store.swift in Sources */,
 				04B5F3AD2938F4F50088A0D9 /* View.swift in Sources */,
 				04FCE2D226D5046F001D1BE8 /* FourierApp.swift in Sources */,
 				04B5F3AB2938F4F50088A0D9 /* DraggableBar.swift in Sources */,
+				04A6557F293D24450084CC6A /* Collection.swift in Sources */,
 				04B5F3B9293965F60088A0D9 /* Path.swift in Sources */,
 				04FCE2E126D5146F001D1BE8 /* DrawView.swift in Sources */,
 				04B5F3B22938F4F50088A0D9 /* InfoView.swift in Sources */,
 				04BA916626DBFB4400014C93 /* Fourier.swift in Sources */,
 				04B5F3BD293A74690088A0D9 /* Defaults.swift in Sources */,
 				04BA916426DBA13300014C93 /* ActionBar.swift in Sources */,
+				04A6557B293D1FA30084CC6A /* String.swift in Sources */,
 				04B5F38A2938C1AE0088A0D9 /* Int.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

@@ -17,6 +17,12 @@ extension CGPath {
     }
     
     var equallySpacedPoints: [CGPoint] {
-        copy(dashingWithPhase: 0, lengths: [10]).points
+        var n = 10.0
+        var points = [CGPoint]()
+        while points.count < 500 {
+            points = copy(dashingWithPhase: 0, lengths: [n]).points
+            n /= 2
+        }
+        return points
     }
 }

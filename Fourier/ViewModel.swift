@@ -28,11 +28,7 @@ class ViewModel: ObservableObject {
     @Published var fourierPath: Path?
     @Published var points = [CGPoint]()
     @Published var N = 11.0
-    
-    @Defaults(key: "components", defaultValue: [CGFloat]()) var components
-    @Published var strokeColour: Color { didSet {
-        components = strokeColour.cgColor?.components ?? []
-    }}
+    @Published var strokeColour = Color.accentColor
     
     @Published var showInfoView = false
     @Published var showSVGImporter = false
@@ -59,11 +55,6 @@ class ViewModel: ObservableObject {
         }
     }
     
-    init() {
-        let components = UserDefaults.standard.object(forKey: "components") as? [CGFloat] ?? [0, 0.5, 1, 1]
-        strokeColour = Color(UIColor(cgColor: CGColor(colorSpace: CGColorSpace(name: CGColorSpace.displayP3)!, components: components) ?? CGColor(red: 0, green: 0.5, blue: 1, alpha: 1)))
-    }
-    
     // MARK: - Functions
     func fail(error: FourierError? = nil) {
         if let error {
@@ -77,9 +68,9 @@ class ViewModel: ObservableObject {
         points = []
         fourierPath = nil
         drawingPath = nil
+        showingExample = false
         savedImage = false
         copiedCoefficients = false
-        showingExample = false
     }
     
     func showExampleSquiggle() {
@@ -111,8 +102,8 @@ class ViewModel: ObservableObject {
                 showErrorAlert = true
             }
             
-            let points = scale(svgPath.cgPath.equallySpacedPoints)
-            newPoints(points, error: .svg)
+            let points = svgPath.cgPath.equallySpacedPoints
+            newPoints(scale(points), error: .svg)
         }
     }
     
@@ -129,38 +120,53 @@ class ViewModel: ObservableObject {
         else { fail(error: .contour); return }
         
         let points = contour.normalizedPoints.map { CGPointMake(CGFloat($0.x), CGFloat($0.y)) }
-        newPoints(scale(points), error: .image)
+        
+        let n = points.count / 500
+        let shortened = points.getEveryNthElement(n: n)
+        
+        newPoints(scale(shortened), error: .image)
     }
     
     func scale(_ points: [CGPoint]) -> [CGPoint] {
         let xs = points.compactMap { $0.x }
         let ys = points.compactMap { $0.y }
-        
+
         let minx = xs.min() ?? 0
         let miny = ys.min() ?? 0
         let maxx = xs.max() ?? 0
         let maxy = ys.max() ?? 0
-        
+
         let transform = CGAffineTransform(translationX: -minx, y: -miny)
         let shifted = points.map { point in
             point.applying(transform)
         }
-        
+
         let oldWidth = maxx - minx
         let oldHeight = maxy - miny
-        let targetWidth = UIScreen.main.bounds.width
-        let targetHeight = UIScreen.main.bounds.height - 140
-        
+
+        let targetWidth: CGFloat
+        var targetHeight: CGFloat
+        if let window = UIApplication.shared.windows.first(where: { $0.isKeyWindow }) {
+            let frame = window.safeAreaLayoutGuide.layoutFrame
+            targetWidth = frame.width
+            targetHeight = frame.height
+        } else {
+            targetWidth = UIScreen.main.bounds.width
+            targetHeight = UIScreen.main.bounds.height
+        }
+        // Height of ActionBar
+        targetHeight -= 90
+
         let padding: CGFloat = 50
         let widthScale = (targetWidth - padding) / oldWidth
         let heightScale = (targetHeight - padding) / oldHeight
         let scale = widthScale < heightScale ? widthScale : heightScale
-        
+
         let newWidth = oldWidth * scale
         let newHeight = oldHeight * scale
         let widthOffset = (targetWidth - newWidth)/2
         let heightOffset = (targetHeight - newHeight)/2
-        
+
         return shifted.map { point in
             CGPointMake(point.x * scale + widthOffset, point.y * scale + heightOffset)
         }

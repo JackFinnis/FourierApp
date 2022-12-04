@@ -60,6 +60,11 @@ struct InfoView: View {
                 } else {
                     Menu {
                         Button {
+                            Emails.compose(subject: "\(NAME) Feedback")
+                        } label: {
+                            Label("Send us Feedback", systemImage: "envelope")
+                        }
+                        Button {
                             Store.writeReview()
                         } label: {
                             Label("Write a Review", systemImage: "quote.bubble")

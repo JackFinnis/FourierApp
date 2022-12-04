@@ -44,7 +44,7 @@ struct ActionBar: View {
                 }
             }
         } label: {
-            Image(systemName: "magnifyingglass")
+            Image(systemName: "ellipsis.circle")
                 .font(.title2)
         }
     }
@@ -54,20 +54,15 @@ struct ActionBar: View {
             if pathShowing {
                 HStack(spacing: 15) {
                     Text(Int(vm.N-1).formattedPlural("Epicycle"))
-                    Spacer()
+                        .fixedSize()
+                    Spacer(minLength: 0)
                     Stepper("", value: $vm.N, in: vm.nRange) { stepping in
                         if !stepping { vm.transform() }
                     }
                     .labelsHidden()
+                    
                     ColorPicker("Line Colour", selection: $vm.strokeColour)
                         .labelsHidden()
-                        .contextMenu {
-                            Button {
-                                vm.strokeColour = .accentColor
-                            } label: {
-                                Label("Reset Colour", systemImage: "arrow.counterclockwise")
-                            }
-                        }
                     
                     Menu {
                         if pathShowing {
@@ -101,12 +96,13 @@ struct ActionBar: View {
                         Button {
                             withAnimation {
                                 boldLines.toggle()
+                                vm.savedImage = false
                             }
                         } label: {
                             Label((boldLines ? "Thinner" : "Thicker") + " Line", systemImage: "lineweight")
                         }
                     } label: {
-                        Image(systemName: "ellipsis.circle")
+                        Image(systemName: "slider.horizontal.3")
                             .font(.title2)
                     }
                     settingsMenu
@@ -158,8 +154,8 @@ struct ActionBar: View {
                 guard status == .authorized else {
                     showPermissionAlert = true; return
                 }
-                guard let view = vm.fourierPath?.stroke(Color.accentColor, lineWidth: 3),
-                      let image = view.snapshot()
+                let view = Line().environmentObject(vm)
+                guard let image = view.snapshot()
                 else { showFailedAlert = true; return }
                 
                 Task {

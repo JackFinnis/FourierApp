@@ -39,13 +39,13 @@ extension View {
         let controller = UIHostingController(rootView: self)
         guard let view = controller.view else { return nil }
 
-        let targetSize = UIScreen.main.bounds.size
-        view.bounds = CGRect(origin: .zero, size: targetSize)
+        let targetRect = UIScreen.main.bounds
+        view.bounds = CGRect(origin: .zero, size: targetRect.size)
         view.backgroundColor = .clear
         
-        let renderer = UIGraphicsImageRenderer(size: targetSize)
+        let renderer = UIGraphicsImageRenderer(size: targetRect.size)
         let image = renderer.image { _ in
-            view.drawHierarchy(in: UIScreen.main.bounds, afterScreenUpdates: true)
+            view.drawHierarchy(in: targetRect, afterScreenUpdates: true)
         }
         
         guard let data = image.pngData() else { return nil }
