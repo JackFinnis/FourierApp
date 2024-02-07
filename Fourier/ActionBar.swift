@@ -160,7 +160,7 @@ struct ActionBar: View {
                 
                 Task {
                     UIImageWriteToSavedPhotosAlbum(image, nil, nil, nil)
-                    Haptics.tap()
+                    Haptics.success()
                     withAnimation {
                         vm.savedImage = true
                     }
