@@ -16,7 +16,7 @@ class Model: ObservableObject {
     private var points = [CGPoint]()
     
     var nRange: ClosedRange<Double> {
-        2...min(Double(points.count), 501)
+        1...min(Double(max(points.count, 1)), 400)
     }
     
     func reset() {
@@ -24,12 +24,7 @@ class Model: ObservableObject {
         points = []
     }
     
-    func showExampleSquiggle() {
-        let url = Bundle.main.url(forResource: "fourier", withExtension: "svg")!
-        importSVG(result: .success(url))
-    }
-    
-    func importSVG(result: Result<URL, Error>) {
+    func importSVG(result: Result<URL, Error>, size: CGSize) {
         switch result {
         case .failure(_): break
         case .success(let url):
@@ -38,12 +33,12 @@ class Model: ObservableObject {
             url.stopAccessingSecurityScopedResource()
             
             guard let svgPath = svgPaths.first else { return }
-            let points = scale(points: svgPath.cgPath.equallySpacedPoints)
+            let points = scale(points: svgPath.cgPath.equallySpacedPoints, size: size)
             transform(points: points)
         }
     }
     
-    func scale(points: [CGPoint]) -> [CGPoint] {
+    func scale(points: [CGPoint], size: CGSize) -> [CGPoint] {
         let xs = points.compactMap { $0.x }
         let ys = points.compactMap { $0.y }
 
@@ -60,18 +55,9 @@ class Model: ObservableObject {
         let oldWidth = maxx - minx
         let oldHeight = maxy - miny
 
-        let targetWidth: CGFloat
-        var targetHeight: CGFloat
-        if let window = UIApplication.shared.windows.first(where: { $0.isKeyWindow }) {
-            let frame = window.safeAreaLayoutGuide.layoutFrame
-            targetWidth = frame.width
-            targetHeight = frame.height
-        } else {
-            targetWidth = UIScreen.main.bounds.width
-            targetHeight = UIScreen.main.bounds.height
-        }
-        // Height of ActionBar
-        targetHeight -= 90
+        let targetWidth = size.width
+        var targetHeight = size.height
+        targetHeight -= Constants.actionBarHeight
 
         let padding: CGFloat = 50
         let widthScale = (targetWidth - padding) / oldWidth
@@ -89,16 +75,15 @@ class Model: ObservableObject {
     }
     
     func transform(points: [CGPoint]) {
-        guard points.count >= 2 else { return }
         reset()
+        guard points.count > 1 else { return }
         self.points = points
         update()
-        Haptics.tap()
     }
     
     func update() {
+        Haptics.tap()
         epicycles = min(epicycles, Double(points.count))
-        
         let points = Fourier.transform(N: Int(epicycles), points: points)
         path = Path { path in
             path.move(to: CGPoint(x: points[0].x, y: points[0].y))
@@ -109,4 +94,8 @@ class Model: ObservableObject {
             path.closeSubpath()
         }
     }
+}
+
+#Preview {
+    RootView()
 }

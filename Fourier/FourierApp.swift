@@ -21,78 +21,87 @@ struct RootView: View {
     @State var showFileImporter = false
     
     var body: some View {
-        VStack(spacing: 0) {
-            ZStack {
-                Color(.systemGray6)
-                    .ignoresSafeArea()
-                    .gesture(drawGesture)
-                if let path = model.path {
-                    PathRenderer(path: path)
-                }
-            }
-            VStack(alignment: .leading, spacing: 10) {
-                if model.isDrawing {
-                    Rectangle()
-                        .foregroundStyle(.background)
-                } else if model.path != nil {
-                    HStack(spacing: 15) {
-                        Text(Int(model.epicycles-1).formatted(singular: "Epicycle"))
-                            .fixedSize()
-                        Spacer()
-                        Stepper("", value: $model.epicycles, in: model.nRange) { stepping in
-                            if !stepping { model.update() }
-                        }
-                        .labelsHidden()
-                        Menu {
-                            Button(role: .destructive) {
-                                model.reset()
-                            } label: {
-                                Label("Reset", systemImage: "xmark")
-                            }
-                            Button {
-                                //todo
-                                Haptics.tap()
-                            } label: {
-                                Label("Save to Photos", systemImage: "square.and.arrow.down")
-                            }
-                        } label: {
-                            Image(systemName: "ellipsis.circle")
-                                .font(.title2)
-                        }
-                    }
-                    Slider(value: $model.epicycles, in: model.nRange, step: 1) { sliding in
-                        if !sliding { model.update() }
-                    }
-                } else {
-                    HStack(alignment: .top, spacing: 10) {
-                        Text("Draw a shape in the space above with your finger or stylus or upload a picture of a silhouette or an svg file and I will squigglify it!")
-                            .font(.subheadline)
-                        Spacer(minLength: 0)
-                        Menu {
-                            Button {
-                                showFileImporter = true
-                            } label: {
-                                Label("Import SVG File", systemImage: "doc")
-                            }
-                            Button {
-                                model.showExampleSquiggle()
-                            } label: {
-                                Label("Joseph Fourier", systemImage: "person.fill")
-                            }
-                        } label: {
-                            Image(systemName: "plus.circle")
-                                .font(.title2)
-                        }
+        GeometryReader { geo in
+            Color(.systemGray6)
+                .ignoresSafeArea()
+                .gesture(drawGesture)
+                .overlay {
+                    if let path = model.path {
+                        PathRenderer(path: path)
+                    } else {
+                        Image(systemName: "hand.draw")
+                            .font(.largeTitle)
+                            .imageScale(.large)
+                            .foregroundStyle(.secondary)
+                            .padding(.bottom, 50)
+                            .allowsHitTesting(false)
                     }
                 }
-            }
-            .frame(height: 100)
-            .padding(.horizontal)
-            .background(.background)
-            .shadow(color: .black.opacity(0.1), radius: 10)
-            .fileImporter(isPresented: $showFileImporter, allowedContentTypes: [.svg], onCompletion: model.importSVG)
+                .overlay(alignment: .bottom) {
+                    ZStack {
+                        if model.isDrawing {
+                        } else if let path = model.path {
+                            VStack(spacing: 5) {
+                                HStack(spacing: 15) {
+                                    Text(Int(model.epicycles).formatted(singular: "Epicycle"))
+                                        .monospacedDigit()
+                                    Spacer()
+                                    Stepper("", value: $model.epicycles, in: model.nRange) { isStepping in
+                                        if !isStepping { model.update() }
+                                    }
+                                    .labelsHidden()
+                                    Menu {
+                                        Button(role: .destructive) {
+                                            model.reset()
+                                        } label: {
+                                            Label("Reset", systemImage: "xmark")
+                                        }
+                                        Button {
+                                            let renderer = ImageRenderer(content: PathRenderer(path: path))
+                                            renderer.proposedSize = .init(geo.size)
+                                            renderer.scale = 3
+                                            guard let uiImage = renderer.uiImage else { return }
+                                            UIImageWriteToSavedPhotosAlbum(uiImage, nil, nil, nil)
+                                            Haptics.tap()
+                                        } label: {
+                                            Label("Save to Photos", systemImage: "square.and.arrow.down")
+                                        }
+                                    } label: {
+                                        Image(systemName: "ellipsis.circle")
+                                            .font(.title2)
+                                    }
+                                }
+                                Slider(value: $model.epicycles, in: model.nRange, step: 1) { isSliding in
+                                    if !isSliding { model.update() }
+                                }
+                            }
+                        } else {
+                            HStack(spacing: 15) {
+                                Button("Import SVG File") {
+                                    showFileImporter = true
+                                }
+                                .buttonStyle(.borderedProminent)
+                                Button("See Example") {
+                                    model.importSVG(result: .success(Constants.fourierURL), size: geo.size)
+                                }
+                                .buttonStyle(.bordered)
+                            }
+                            .menuStyle(.button)
+                            .buttonBorderShape(.capsule)
+                            .font(.headline)
+                            .padding(.bottom)
+                        }
+                    }
+                    .frame(maxWidth: .infinity)
+                    .frame(height: Constants.actionBarHeight, alignment: .bottom)
+                    .padding(.horizontal)
+                    .background(.background)
+                    .shadow(color: .black.opacity(0.1), radius: 10)
+                }
+                .fileImporter(isPresented: $showFileImporter, allowedContentTypes: [.svg]) { result in
+                    model.importSVG(result: result, size: geo.size)
+                }
         }
-        .environmentObject(model)
     }
     
     var drawGesture: some Gesture {

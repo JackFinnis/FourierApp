@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		046203B52C2397C400AB6BD9 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 046203B42C2397C400AB6BD9 /* Constants.swift */; };
 		04A6557F293D24450084CC6A /* Collection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04A6557E293D24450084CC6A /* Collection.swift */; };
 		04B5F38A2938C1AE0088A0D9 /* Int.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04B5F3892938C1AE0088A0D9 /* Int.swift */; };
 		04B5F3B12938F4F50088A0D9 /* Haptics.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04B5F3A92938F4F50088A0D9 /* Haptics.swift */; };
@@ -21,6 +22,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		046203B42C2397C400AB6BD9 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		04A6557E293D24450084CC6A /* Collection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Collection.swift; sourceTree = "<group>"; };
 		04B5F3892938C1AE0088A0D9 /* Int.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Int.swift; sourceTree = "<group>"; };
 		04B5F3A92938F4F50088A0D9 /* Haptics.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Haptics.swift; sourceTree = "<group>"; };
@@ -62,6 +64,7 @@
 			children = (
 				04B5F3A92938F4F50088A0D9 /* Haptics.swift */,
 				04BA916526DBFB4400014C93 /* Fourier.swift */,
+				046203B42C2397C400AB6BD9 /* Constants.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -188,6 +191,7 @@
 				04B5F3B9293965F60088A0D9 /* CGPath.swift in Sources */,
 				04BA916626DBFB4400014C93 /* Fourier.swift in Sources */,
 				04B5F38A2938C1AE0088A0D9 /* Int.swift in Sources */,
+				046203B52C2397C400AB6BD9 /* Constants.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
