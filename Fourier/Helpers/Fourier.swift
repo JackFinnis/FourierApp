@@ -56,16 +56,4 @@ struct Fourier {
         let approx = getApprox(N: N, path: path, cs: cs)
         return approx.map { CGPointMake($0.real, $0.imaginary) }
     }
-    
-    static func getCoefficients(N: Int, points: [CGPoint]) -> [(Int, Double, Double)] {
-        let path = points.map { Complex(Double($0.x), Double($0.y)) }
-        let cs = getCs(N: N, path: path)
-        return cs.map { n, c in
-            let r = c.real
-            let i = c.imaginary
-            let radius = sqrt(pow(r, 2)+pow(i, 2))
-            let angle = atan(i/r)
-            return (n, radius, angle)
-        }.sorted(by: { $0.0 < $1.0 })
-    }
 }

@@ -10,73 +10,40 @@ import Vision
 import PocketSVG
 
 class Model: ObservableObject {
-    var path: Path? { drawingPath ?? fourierPath }
-    
-    @Published var drawingPath: Path?
     @Published var isDrawing = false
-    
-    @Published var fourierPath: Path?
-    @Published var points = [CGPoint]()
-    @Published var N = 11.0
-    
-    @Published var showingExample = false
+    @Published var path: Path?
+    @Published var epicycles = 10.0
+    private var points = [CGPoint]()
     
     var nRange: ClosedRange<Double> {
-        2...[[3, Double(points.count)].max()!, 501].min()!
+        2...min(Double(points.count), 501)
     }
     
     func reset() {
+        path = nil
         points = []
-        fourierPath = nil
-        drawingPath = nil
-        showingExample = false
     }
     
     func showExampleSquiggle() {
         let url = Bundle.main.url(forResource: "fourier", withExtension: "svg")!
-        showingExample = true
         importSVG(result: .success(url))
-        showingExample = true
     }
     
     func importSVG(result: Result<URL, Error>) {
         switch result {
         case .failure(_): break
         case .success(let url):
-            if !showingExample {
-                guard url.startAccessingSecurityScopedResource() else { return }
-            }
-            
+            _ = url.startAccessingSecurityScopedResource()
             let svgPaths = SVGBezierPath.pathsFromSVG(at: url)
             url.stopAccessingSecurityScopedResource()
             
             guard let svgPath = svgPaths.first else { return }
-            
-            let points = svgPath.cgPath.equallySpacedPoints
-            newPoints(scale(points))
+            let points = scale(points: svgPath.cgPath.equallySpacedPoints)
+            transform(points: points)
         }
     }
     
-    func importImage(image: UIImage?) {
-        guard let cgImage = image?.cgImage else { return }
-        
-        let contourRequest = VNDetectContoursRequest()
-        let requestHandler = VNImageRequestHandler(ciImage: CIImage(cgImage: cgImage), orientation: .downMirrored)
-        try? requestHandler.perform([contourRequest])
-        
-        guard let contours = contourRequest.results?.first,
-              let contour = contours.topLevelContours.max(by: { $0.pointCount < $1.pointCount })
-        else { return }
-        
-        let points = contour.normalizedPoints.map { CGPointMake(CGFloat($0.x), CGFloat($0.y)) }
-        
-        let n = points.count / 500
-        let shortened = points.getEveryNthElement(n: n)
-        
-        newPoints(scale(shortened))
-    }
-    
-    func scale(_ points: [CGPoint]) -> [CGPoint] {
+    func scale(points: [CGPoint]) -> [CGPoint] {
         let xs = points.compactMap { $0.x }
         let ys = points.compactMap { $0.y }
 
@@ -121,21 +88,19 @@ class Model: ObservableObject {
         }
     }
     
-    func newPoints(_ points: [CGPoint]) {
+    func transform(points: [CGPoint]) {
         guard points.count >= 2 else { return }
-        
         reset()
         self.points = points
-        transform()
+        update()
         Haptics.tap()
-        showingExample = false
     }
     
-    func transform() {
-        N = [N, Double(points.count)].min()!
+    func update() {
+        epicycles = min(epicycles, Double(points.count))
         
-        let points = Fourier.transform(N: Int(N), points: points)
-        fourierPath = Path { path in
+        let points = Fourier.transform(N: Int(epicycles), points: points)
+        path = Path { path in
             path.move(to: CGPoint(x: points[0].x, y: points[0].y))
             for i in 1..<points.count {
                 path.addLine(to: CGPoint(x: points[i].x, y: points[i].y))

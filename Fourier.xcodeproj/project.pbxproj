@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		046203B32C2302F000AB6BD9 /* PathRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 046203B22C2302F000AB6BD9 /* PathRenderer.swift */; };
 		04A6557F293D24450084CC6A /* Collection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04A6557E293D24450084CC6A /* Collection.swift */; };
 		04B5F38A2938C1AE0088A0D9 /* Int.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04B5F3892938C1AE0088A0D9 /* Int.swift */; };
 		04B5F3B12938F4F50088A0D9 /* Haptics.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04B5F3A92938F4F50088A0D9 /* Haptics.swift */; };
@@ -15,29 +14,24 @@
 		04B5F3B9293965F60088A0D9 /* CGPath.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04B5F3B8293965F60088A0D9 /* CGPath.swift */; };
 		04B5F3BB293A16520088A0D9 /* fourier.svg in Resources */ = {isa = PBXBuildFile; fileRef = 04B5F3BA293A16520088A0D9 /* fourier.svg */; };
 		04BA916026DB9FE600014C93 /* Model.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04BA915F26DB9FE600014C93 /* Model.swift */; };
-		04BA916426DBA13300014C93 /* ActionBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04BA916326DBA13300014C93 /* ActionBar.swift */; };
 		04BA916626DBFB4400014C93 /* Fourier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04BA916526DBFB4400014C93 /* Fourier.swift */; };
 		04BA916926DC008900014C93 /* ComplexModule in Frameworks */ = {isa = PBXBuildFile; productRef = 04BA916826DC008900014C93 /* ComplexModule */; };
 		04FCE2D226D5046F001D1BE8 /* FourierApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04FCE2D126D5046F001D1BE8 /* FourierApp.swift */; };
 		04FCE2D626D50470001D1BE8 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 04FCE2D526D50470001D1BE8 /* Assets.xcassets */; };
-		04FCE2E126D5146F001D1BE8 /* RootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04FCE2E026D5146F001D1BE8 /* RootView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		046203B22C2302F000AB6BD9 /* PathRenderer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PathRenderer.swift; sourceTree = "<group>"; };
 		04A6557E293D24450084CC6A /* Collection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Collection.swift; sourceTree = "<group>"; };
 		04B5F3892938C1AE0088A0D9 /* Int.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Int.swift; sourceTree = "<group>"; };
 		04B5F3A92938F4F50088A0D9 /* Haptics.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Haptics.swift; sourceTree = "<group>"; };
 		04B5F3B8293965F60088A0D9 /* CGPath.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CGPath.swift; sourceTree = "<group>"; };
 		04B5F3BA293A16520088A0D9 /* fourier.svg */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = fourier.svg; sourceTree = "<group>"; };
 		04BA915F26DB9FE600014C93 /* Model.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Model.swift; sourceTree = "<group>"; };
-		04BA916326DBA13300014C93 /* ActionBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActionBar.swift; sourceTree = "<group>"; };
 		04BA916526DBFB4400014C93 /* Fourier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Fourier.swift; sourceTree = "<group>"; };
 		04FCE2CE26D5046F001D1BE8 /* Fourier.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Fourier.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		04FCE2D126D5046F001D1BE8 /* FourierApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FourierApp.swift; sourceTree = "<group>"; };
 		04FCE2D526D50470001D1BE8 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		04FCE2DA26D50470001D1BE8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		04FCE2E026D5146F001D1BE8 /* RootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -53,25 +47,6 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		046203AC2C22FF6A00AB6BD9 /* Models */ = {
-			isa = PBXGroup;
-			children = (
-				04BA915F26DB9FE600014C93 /* Model.swift */,
-			);
-			path = Models;
-			sourceTree = "<group>";
-		};
-		046203B12C23012E00AB6BD9 /* Views */ = {
-			isa = PBXGroup;
-			children = (
-				04FCE2D126D5046F001D1BE8 /* FourierApp.swift */,
-				04FCE2E026D5146F001D1BE8 /* RootView.swift */,
-				046203B22C2302F000AB6BD9 /* PathRenderer.swift */,
-				04BA916326DBA13300014C93 /* ActionBar.swift */,
-			);
-			path = Views;
-			sourceTree = "<group>";
-		};
 		04A65580293D436E0084CC6A /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
@@ -120,8 +95,8 @@
 		04FCE2D026D5046F001D1BE8 /* Fourier */ = {
 			isa = PBXGroup;
 			children = (
-				046203B12C23012E00AB6BD9 /* Views */,
-				046203AC2C22FF6A00AB6BD9 /* Models */,
+				04FCE2D126D5046F001D1BE8 /* FourierApp.swift */,
+				04BA915F26DB9FE600014C93 /* Model.swift */,
 				04A65581293D43A70084CC6A /* Helpers */,
 				04A65580293D436E0084CC6A /* Extensions */,
 				04B5F3882938BBA70088A0D9 /* Resources */,
@@ -211,10 +186,7 @@
 				04FCE2D226D5046F001D1BE8 /* FourierApp.swift in Sources */,
 				04A6557F293D24450084CC6A /* Collection.swift in Sources */,
 				04B5F3B9293965F60088A0D9 /* CGPath.swift in Sources */,
-				046203B32C2302F000AB6BD9 /* PathRenderer.swift in Sources */,
-				04FCE2E126D5146F001D1BE8 /* RootView.swift in Sources */,
 				04BA916626DBFB4400014C93 /* Fourier.swift in Sources */,
-				04BA916426DBA13300014C93 /* ActionBar.swift in Sources */,
 				04B5F38A2938C1AE0088A0D9 /* Int.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -343,7 +315,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_ENTITLEMENTS = Fourier/Fourier.entitlements;
+				CODE_SIGN_ENTITLEMENTS = "";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_ASSET_PATHS = "";
@@ -370,7 +342,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_ENTITLEMENTS = Fourier/Fourier.entitlements;
+				CODE_SIGN_ENTITLEMENTS = "";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_ASSET_PATHS = "";
