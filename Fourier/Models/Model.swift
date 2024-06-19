@@ -9,59 +9,20 @@ import SwiftUI
 import Vision
 import PocketSVG
 
-enum FourierError: String {
-    case downloadSvg = "I was unable to import this svg file. Please ensure it is downloaded from iCloud and try again."
-    case accessSvg = "I was unable to access this svg file. Please ensure you have sufficient permission and try again."
-    case parseSvg = "I was unable to parse this svg file. Please ensure it is in a valid format and try again."
-    case svg = "I was unable to squigglify this svg file. Please try using a different file."
-    case multiplePaths = "This svg file has multiple paths. Only the first will be displayed."
-    case image = "I was unable to squigglify this silhouette. Please try using a different image."
-    case contour = "I was unable to find a contour in this silhouette. Please try using a different image."
-    case loadImage = "I was unable to import this image. Please ensure it is downloaded from iCloud and try again."
-}
-
-class ViewModel: ObservableObject {
-    // MARK: - Properties
+class Model: ObservableObject {
+    var path: Path? { drawingPath ?? fourierPath }
+    
     @Published var drawingPath: Path?
-    @Published var drawing = false
+    @Published var isDrawing = false
     
     @Published var fourierPath: Path?
     @Published var points = [CGPoint]()
     @Published var N = 11.0
-    @Published var strokeColour = Color.accentColor
     
-    @Published var showInfoView = false
-    @Published var showSVGImporter = false
-    @Published var showImagePicker = false
-    
-    @Published var showErrorAlert = false
-    @Published var error = FourierError.image
-    
-    @Published var savedImage = false
-    @Published var copiedCoefficients = false
     @Published var showingExample = false
     
     var nRange: ClosedRange<Double> {
         2...[[3, Double(points.count)].max()!, 501].min()!
-    }
-    var infoMessage: String? {
-        switch N {
-        case 501:
-            return points.isEmpty ? nil : "Using more than 500 epicycles makes calculations quite slow!"
-        case Double(points.count):
-            return "A curve with n points is perfectly approximated using n epicycles."
-        default:
-            return nil
-        }
-    }
-    
-    // MARK: - Functions
-    func fail(error: FourierError? = nil) {
-        if let error {
-            Haptics.error()
-            self.error = error
-            showErrorAlert = true
-        }
     }
     
     func reset() {
@@ -69,47 +30,35 @@ class ViewModel: ObservableObject {
         fourierPath = nil
         drawingPath = nil
         showingExample = false
-        savedImage = false
-        copiedCoefficients = false
     }
     
     func showExampleSquiggle() {
-        if let url = Bundle.main.url(forResource: "fourier", withExtension: "svg") {
-            showingExample = true
-            importSVG(result: .success(url))
-            showingExample = true
-        }
+        let url = Bundle.main.url(forResource: "fourier", withExtension: "svg")!
+        showingExample = true
+        importSVG(result: .success(url))
+        showingExample = true
     }
     
     func importSVG(result: Result<URL, Error>) {
         switch result {
-        case .failure(_):
-            fail(error: .downloadSvg)
+        case .failure(_): break
         case .success(let url):
             if !showingExample {
-                guard url.startAccessingSecurityScopedResource()
-                else { fail(error: .accessSvg); return }
+                guard url.startAccessingSecurityScopedResource() else { return }
             }
             
             let svgPaths = SVGBezierPath.pathsFromSVG(at: url)
             url.stopAccessingSecurityScopedResource()
             
-            guard let svgPath = svgPaths.first
-            else { fail(error: .parseSvg); return }
-            
-            if svgPaths.count > 1 {
-                error = .multiplePaths
-                showErrorAlert = true
-            }
+            guard let svgPath = svgPaths.first else { return }
             
             let points = svgPath.cgPath.equallySpacedPoints
-            newPoints(scale(points), error: .svg)
+            newPoints(scale(points))
         }
     }
     
     func importImage(image: UIImage?) {
-        guard let cgImage = image?.cgImage
-        else { fail(error: .loadImage); return }
+        guard let cgImage = image?.cgImage else { return }
         
         let contourRequest = VNDetectContoursRequest()
         let requestHandler = VNImageRequestHandler(ciImage: CIImage(cgImage: cgImage), orientation: .downMirrored)
@@ -117,14 +66,14 @@ class ViewModel: ObservableObject {
         
         guard let contours = contourRequest.results?.first,
               let contour = contours.topLevelContours.max(by: { $0.pointCount < $1.pointCount })
-        else { fail(error: .contour); return }
+        else { return }
         
         let points = contour.normalizedPoints.map { CGPointMake(CGFloat($0.x), CGFloat($0.y)) }
         
         let n = points.count / 500
         let shortened = points.getEveryNthElement(n: n)
         
-        newPoints(scale(shortened), error: .image)
+        newPoints(scale(shortened))
     }
     
     func scale(_ points: [CGPoint]) -> [CGPoint] {
@@ -172,9 +121,8 @@ class ViewModel: ObservableObject {
         }
     }
     
-    func newPoints(_ points: [CGPoint], error: FourierError? = nil) {
-        guard points.count >= 2
-        else { fail(error: error); return }
+    func newPoints(_ points: [CGPoint]) {
+        guard points.count >= 2 else { return }
         
         reset()
         self.points = points
@@ -185,8 +133,6 @@ class ViewModel: ObservableObject {
     
     func transform() {
         N = [N, Double(points.count)].min()!
-        savedImage = false
-        copiedCoefficients = false
         
         let points = Fourier.transform(N: Int(N), points: points)
         fourierPath = Path { path in
@@ -198,20 +144,4 @@ class ViewModel: ObservableObject {
             path.closeSubpath()
         }
     }
-    
-    func copyCoefficients() {
-        let coefficients = Fourier.getCoefficients(N: Int(N), points: points)
-        
-        var string = "rotations per second (anticlockwise),radius,initial angle (radians)\n"
-        string += coefficients.map { n, r, a in
-            "\(n),\(r),\(a)"
-        }.joined(separator: "\n")
-        
-        UIPasteboard.general.string = string
-        Haptics.success()
-        copiedCoefficients = true
-    }
 }
-
-// tab: \u{9}
-// new line: \u{A}

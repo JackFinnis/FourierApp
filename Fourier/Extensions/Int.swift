@@ -8,7 +8,7 @@
 import Foundation
 
 extension Int {
-    func formattedPlural(_ singularWord: String) -> String {
-        (self == 0 ? "No" : String(self)) + " " + singularWord + (self == 1 ? "" : "s")
+    func formatted(singular word: String) -> String {
+        "\(self == 0 ? "No" : String(self)) \(word)\(self == 1 ? "" : "s")"
     }
 }
