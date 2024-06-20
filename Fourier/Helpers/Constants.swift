@@ -8,6 +8,5 @@
 import Foundation
 
 struct Constants {
-    static let fourierURL = Bundle.main.url(forResource: "fourier", withExtension: "svg")!
     static let actionBarHeight = 80.0
 }

@@ -16,10 +16,11 @@ class Model: ObservableObject {
     private var points = [CGPoint]()
     
     var nRange: ClosedRange<Double> {
-        1...min(Double(max(points.count, 1)), 400)
+        1...min(Double(max(points.count, 1)), 500)
     }
     
     func reset() {
+        epicycles = 10.0
         path = nil
         points = []
     }

@@ -77,12 +77,16 @@ struct RootView: View {
                             }
                         } else {
                             HStack(spacing: 15) {
-                                Button("Import SVG File") {
+                                Button("Import SVG") {
                                     showFileImporter = true
                                 }
                                 .buttonStyle(.borderedProminent)
-                                Button("See Example") {
-                                    model.importSVG(result: .success(Constants.fourierURL), size: geo.size)
+                                Menu("Examples") {
+                                    ForEach(ExampleFile.allCases, id: \.self) { file in
+                                        Button(file.name) {
+                                            model.importSVG(result: .success(file.url), size: geo.size)
+                                        }
+                                    }
                                 }
                                 .buttonStyle(.bordered)
                             }
@@ -133,5 +137,21 @@ struct PathRenderer: View {
     
     var body: some View {
         path.stroke(Color.accentColor, style: .init(lineWidth: 3, lineCap: .round, lineJoin: .round))
+    }
+}
+
+enum ExampleFile: String, CaseIterable {
+    case fourier
+    case pi
+    
+    var name: String {
+        switch self {
+        case .fourier:      return "Joseph Fourier"
+        case .pi:           return "Pi"
+        }
+    }
+    
+    var url: URL {
+        Bundle.main.url(forResource: rawValue, withExtension: "svg")!
     }
 }

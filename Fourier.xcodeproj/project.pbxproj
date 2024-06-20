@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		046203B52C2397C400AB6BD9 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 046203B42C2397C400AB6BD9 /* Constants.swift */; };
+		046203B72C23A7EC00AB6BD9 /* pi.svg in Resources */ = {isa = PBXBuildFile; fileRef = 046203B62C23A7EC00AB6BD9 /* pi.svg */; };
 		04A6557F293D24450084CC6A /* Collection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04A6557E293D24450084CC6A /* Collection.swift */; };
 		04B5F38A2938C1AE0088A0D9 /* Int.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04B5F3892938C1AE0088A0D9 /* Int.swift */; };
 		04B5F3B12938F4F50088A0D9 /* Haptics.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04B5F3A92938F4F50088A0D9 /* Haptics.swift */; };
@@ -23,6 +24,7 @@
 
 /* Begin PBXFileReference section */
 		046203B42C2397C400AB6BD9 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
+		046203B62C23A7EC00AB6BD9 /* pi.svg */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = pi.svg; sourceTree = "<group>"; };
 		04A6557E293D24450084CC6A /* Collection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Collection.swift; sourceTree = "<group>"; };
 		04B5F3892938C1AE0088A0D9 /* Int.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Int.swift; sourceTree = "<group>"; };
 		04B5F3A92938F4F50088A0D9 /* Haptics.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Haptics.swift; sourceTree = "<group>"; };
@@ -72,8 +74,9 @@
 		04B5F3882938BBA70088A0D9 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				04B5F3BA293A16520088A0D9 /* fourier.svg */,
 				04FCE2D526D50470001D1BE8 /* Assets.xcassets */,
+				04B5F3BA293A16520088A0D9 /* fourier.svg */,
+				046203B62C23A7EC00AB6BD9 /* pi.svg */,
 				04FCE2DA26D50470001D1BE8 /* Info.plist */,
 			);
 			path = Resources;
@@ -173,6 +176,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				04FCE2D626D50470001D1BE8 /* Assets.xcassets in Resources */,
+				046203B72C23A7EC00AB6BD9 /* pi.svg in Resources */,
 				04B5F3BB293A16520088A0D9 /* fourier.svg in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
