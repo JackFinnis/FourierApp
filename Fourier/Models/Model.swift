@@ -7,12 +7,16 @@
 
 import SwiftUI
 import Vision
-import PocketSVG
+import VectorPlus
+import SwiftSVG
 
-class Model: ObservableObject {
-    @Published var isDrawing = false
-    @Published var path: Path?
-    @Published var epicycles = 10.0
+@Observable
+class Model {
+    var isSaved = false
+    var showFileImporter = false
+    var isDrawing = false
+    var path: SwiftUI.Path?
+    var epicycles = 10.0
     private var points = [CGPoint]()
     
     var nRange: ClosedRange<Double> {
@@ -25,17 +29,33 @@ class Model: ObservableObject {
         points = []
     }
     
+    @MainActor
+    func save(path: SwiftUI.Path, size: CGSize) {
+        let renderer = ImageRenderer(content: PathRenderer(path: path))
+        renderer.proposedSize = .init(size)
+        renderer.scale = 3
+        guard let uiImage = renderer.uiImage else { return }
+        UIImageWriteToSavedPhotosAlbum(uiImage, nil, nil, nil)
+        Haptics.tap()
+    }
+    
     func importSVG(result: Result<URL, Error>, size: CGSize) {
         switch result {
         case .failure(_): break
         case .success(let url):
-            _ = url.startAccessingSecurityScopedResource()
-            let svgPaths = SVGBezierPath.pathsFromSVG(at: url)
-            url.stopAccessingSecurityScopedResource()
-            
-            guard let svgPath = svgPaths.first else { return }
-            let points = scale(points: svgPath.cgPath.equallySpacedPoints, size: size)
-            transform(points: points)
+            do {
+                _ = url.startAccessingSecurityScopedResource()
+                let svg = try SVG.make(from: url)
+                url.stopAccessingSecurityScopedResource()
+                
+                let cgPath = svg.path(size: .init(size))
+                let points = cgPath.copy(dashingWithPhase: 0, lengths: [2]).points
+                let scaledPoints = scale(points: points, size: size)
+                transform(points: scaledPoints)
+            } catch {
+                print(error)
+                return
+            }
         }
     }
     
@@ -58,7 +78,9 @@ class Model: ObservableObject {
 
         let targetWidth = size.width
         var targetHeight = size.height
+        #if os(iOS)
         targetHeight -= Constants.actionBarHeight
+        #endif
 
         let padding: CGFloat = 50
         let widthScale = (targetWidth - padding) / oldWidth
@@ -84,6 +106,7 @@ class Model: ObservableObject {
     
     func update() {
         Haptics.tap()
+        isSaved = false
         epicycles = min(epicycles, Double(points.count))
         let points = Fourier.transform(N: Int(epicycles), points: points)
         path = Path { path in

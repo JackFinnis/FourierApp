@@ -9,10 +9,14 @@
 /* Begin PBXBuildFile section */
 		046203B52C2397C400AB6BD9 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 046203B42C2397C400AB6BD9 /* Constants.swift */; };
 		046203B72C23A7EC00AB6BD9 /* pi.svg in Resources */ = {isa = PBXBuildFile; fileRef = 046203B62C23A7EC00AB6BD9 /* pi.svg */; };
+		049BDA1A2C4E79DA00652F71 /* VectorPlus in Frameworks */ = {isa = PBXBuildFile; productRef = 049BDA192C4E79DA00652F71 /* VectorPlus */; };
+		049BDA1F2C4E856A00652F71 /* RootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 049BDA1E2C4E856A00652F71 /* RootView.swift */; };
+		049BDA212C4E857B00652F71 /* ActionBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 049BDA202C4E857B00652F71 /* ActionBar.swift */; };
+		049BDA232C4E859100652F71 /* PathRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 049BDA222C4E859100652F71 /* PathRenderer.swift */; };
+		049BDA252C4E85A300652F71 /* ExampleFile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 049BDA242C4E85A300652F71 /* ExampleFile.swift */; };
 		04A6557F293D24450084CC6A /* Collection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04A6557E293D24450084CC6A /* Collection.swift */; };
 		04B5F38A2938C1AE0088A0D9 /* Int.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04B5F3892938C1AE0088A0D9 /* Int.swift */; };
 		04B5F3B12938F4F50088A0D9 /* Haptics.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04B5F3A92938F4F50088A0D9 /* Haptics.swift */; };
-		04B5F3B7293957A60088A0D9 /* PocketSVG in Frameworks */ = {isa = PBXBuildFile; productRef = 04B5F3B6293957A60088A0D9 /* PocketSVG */; };
 		04B5F3B9293965F60088A0D9 /* CGPath.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04B5F3B8293965F60088A0D9 /* CGPath.swift */; };
 		04B5F3BB293A16520088A0D9 /* fourier.svg in Resources */ = {isa = PBXBuildFile; fileRef = 04B5F3BA293A16520088A0D9 /* fourier.svg */; };
 		04BA916026DB9FE600014C93 /* Model.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04BA915F26DB9FE600014C93 /* Model.swift */; };
@@ -25,6 +29,10 @@
 /* Begin PBXFileReference section */
 		046203B42C2397C400AB6BD9 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		046203B62C23A7EC00AB6BD9 /* pi.svg */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = pi.svg; sourceTree = "<group>"; };
+		049BDA1E2C4E856A00652F71 /* RootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootView.swift; sourceTree = "<group>"; };
+		049BDA202C4E857B00652F71 /* ActionBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActionBar.swift; sourceTree = "<group>"; };
+		049BDA222C4E859100652F71 /* PathRenderer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PathRenderer.swift; sourceTree = "<group>"; };
+		049BDA242C4E85A300652F71 /* ExampleFile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExampleFile.swift; sourceTree = "<group>"; };
 		04A6557E293D24450084CC6A /* Collection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Collection.swift; sourceTree = "<group>"; };
 		04B5F3892938C1AE0088A0D9 /* Int.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Int.swift; sourceTree = "<group>"; };
 		04B5F3A92938F4F50088A0D9 /* Haptics.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Haptics.swift; sourceTree = "<group>"; };
@@ -44,13 +52,33 @@
 			buildActionMask = 2147483647;
 			files = (
 				04BA916926DC008900014C93 /* ComplexModule in Frameworks */,
-				04B5F3B7293957A60088A0D9 /* PocketSVG in Frameworks */,
+				049BDA1A2C4E79DA00652F71 /* VectorPlus in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		049BDA1C2C4E855700652F71 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				04FCE2D126D5046F001D1BE8 /* FourierApp.swift */,
+				049BDA1E2C4E856A00652F71 /* RootView.swift */,
+				049BDA202C4E857B00652F71 /* ActionBar.swift */,
+				049BDA222C4E859100652F71 /* PathRenderer.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		049BDA1D2C4E855E00652F71 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				04BA915F26DB9FE600014C93 /* Model.swift */,
+				049BDA242C4E85A300652F71 /* ExampleFile.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
 		04A65580293D436E0084CC6A /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
@@ -101,8 +129,8 @@
 		04FCE2D026D5046F001D1BE8 /* Fourier */ = {
 			isa = PBXGroup;
 			children = (
-				04FCE2D126D5046F001D1BE8 /* FourierApp.swift */,
-				04BA915F26DB9FE600014C93 /* Model.swift */,
+				049BDA1C2C4E855700652F71 /* Views */,
+				049BDA1D2C4E855E00652F71 /* Models */,
 				04A65581293D43A70084CC6A /* Helpers */,
 				04A65580293D436E0084CC6A /* Extensions */,
 				04B5F3882938BBA70088A0D9 /* Resources */,
@@ -128,7 +156,7 @@
 			name = Fourier;
 			packageProductDependencies = (
 				04BA916826DC008900014C93 /* ComplexModule */,
-				04B5F3B6293957A60088A0D9 /* PocketSVG */,
+				049BDA192C4E79DA00652F71 /* VectorPlus */,
 			);
 			productName = Fourier;
 			productReference = 04FCE2CE26D5046F001D1BE8 /* Fourier.app */;
@@ -159,7 +187,7 @@
 			mainGroup = 04FCE2C526D5046F001D1BE8;
 			packageReferences = (
 				04BA916726DC008800014C93 /* XCRemoteSwiftPackageReference "swift-numerics" */,
-				04B5F3B5293957A60088A0D9 /* XCRemoteSwiftPackageReference "PocketSVG" */,
+				049BDA182C4E79DA00652F71 /* XCRemoteSwiftPackageReference "VectorPlus" */,
 			);
 			productRefGroup = 04FCE2CF26D5046F001D1BE8 /* Products */;
 			projectDirPath = "";
@@ -188,12 +216,16 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				049BDA232C4E859100652F71 /* PathRenderer.swift in Sources */,
 				04B5F3B12938F4F50088A0D9 /* Haptics.swift in Sources */,
 				04BA916026DB9FE600014C93 /* Model.swift in Sources */,
 				04FCE2D226D5046F001D1BE8 /* FourierApp.swift in Sources */,
+				049BDA252C4E85A300652F71 /* ExampleFile.swift in Sources */,
 				04A6557F293D24450084CC6A /* Collection.swift in Sources */,
 				04B5F3B9293965F60088A0D9 /* CGPath.swift in Sources */,
+				049BDA1F2C4E856A00652F71 /* RootView.swift in Sources */,
 				04BA916626DBFB4400014C93 /* Fourier.swift in Sources */,
+				049BDA212C4E857B00652F71 /* ActionBar.swift in Sources */,
 				04B5F38A2938C1AE0088A0D9 /* Int.swift in Sources */,
 				046203B52C2397C400AB6BD9 /* Constants.swift in Sources */,
 			);
@@ -330,7 +362,7 @@
 				DEVELOPMENT_TEAM = 4CQW4CFFYT;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = Fourier/Resources/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -338,10 +370,12 @@
 				MARKETING_VERSION = 1.1;
 				PRODUCT_BUNDLE_IDENTIFIER = JackFinnis.Fourier;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator xros xrsimulator";
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = YES;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = "1,2,7";
 			};
 			name = Debug;
 		};
@@ -357,7 +391,7 @@
 				DEVELOPMENT_TEAM = 4CQW4CFFYT;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = Fourier/Resources/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -365,10 +399,12 @@
 				MARKETING_VERSION = 1.1;
 				PRODUCT_BUNDLE_IDENTIFIER = JackFinnis.Fourier;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator xros xrsimulator";
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = YES;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = "1,2,7";
 			};
 			name = Release;
 		};
@@ -396,12 +432,12 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		04B5F3B5293957A60088A0D9 /* XCRemoteSwiftPackageReference "PocketSVG" */ = {
+		049BDA182C4E79DA00652F71 /* XCRemoteSwiftPackageReference "VectorPlus" */ = {
 			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/pocketsvg/PocketSVG.git";
+			repositoryURL = "https://github.com/richardpiazza/VectorPlus";
 			requirement = {
-				kind = upToNextMinorVersion;
-				minimumVersion = 2.7.0;
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.3.0;
 			};
 		};
 		04BA916726DC008800014C93 /* XCRemoteSwiftPackageReference "swift-numerics" */ = {
@@ -415,10 +451,10 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		04B5F3B6293957A60088A0D9 /* PocketSVG */ = {
+		049BDA192C4E79DA00652F71 /* VectorPlus */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 04B5F3B5293957A60088A0D9 /* XCRemoteSwiftPackageReference "PocketSVG" */;
-			productName = PocketSVG;
+			package = 049BDA182C4E79DA00652F71 /* XCRemoteSwiftPackageReference "VectorPlus" */;
+			productName = VectorPlus;
 		};
 		04BA916826DC008900014C93 /* ComplexModule */ = {
 			isa = XCSwiftPackageProductDependency;

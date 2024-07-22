@@ -15,8 +15,4 @@ extension CGPath {
         }
         return points
     }
-    
-    var equallySpacedPoints: [CGPoint] {
-        copy(dashingWithPhase: 0, lengths: [10]).points
-    }
 }

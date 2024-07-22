@@ -1,12 +1,22 @@
 {
+  "originHash" : "8f24456c701cb3a4cb96aba4c23afd0f9367cadb7c7bf40d5b4cf0cc758d036d",
   "pins" : [
     {
-      "identity" : "pocketsvg",
+      "identity" : "shellout",
       "kind" : "remoteSourceControl",
-      "location" : "https://github.com/pocketsvg/PocketSVG.git",
+      "location" : "https://github.com/JohnSundell/ShellOut.git",
       "state" : {
-        "revision" : "d30bf6678ae93763782a4e19973dc64762d42c4a",
-        "version" : "2.7.2"
+        "revision" : "e1577acf2b6e90086d01a6d5e2b8efdaae033568",
+        "version" : "2.3.0"
+      }
+    },
+    {
+      "identity" : "swift-argument-parser",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/apple/swift-argument-parser",
+      "state" : {
+        "revision" : "9564d61b08a5335ae0a36f789a7d71493eacadfc",
+        "version" : "0.3.2"
       }
     },
     {
@@ -17,7 +27,52 @@
         "revision" : "6583ac70c326c3ee080c1d42d9ca3361dca816cd",
         "version" : "0.1.0"
       }
+    },
+    {
+      "identity" : "swift2d",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/richardpiazza/Swift2D.git",
+      "state" : {
+        "revision" : "f9e993c0075013339c5c132ab01fc78750b8774f",
+        "version" : "2.1.0"
+      }
+    },
+    {
+      "identity" : "swiftcolor",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/richardpiazza/SwiftColor.git",
+      "state" : {
+        "revision" : "d1e5bad50a0e6e37534ad79dbaf6dc8de9a733cc",
+        "version" : "0.2.0"
+      }
+    },
+    {
+      "identity" : "swiftsvg",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/richardpiazza/SwiftSVG",
+      "state" : {
+        "revision" : "7238a601fc0e074543e3fa1b1912bf7afa9d32bf",
+        "version" : "0.11.0"
+      }
+    },
+    {
+      "identity" : "vectorplus",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/richardpiazza/VectorPlus",
+      "state" : {
+        "revision" : "5c06c07cc35169ae8ec48626d1fe49f1a6f75504",
+        "version" : "0.3.0"
+      }
+    },
+    {
+      "identity" : "xmlcoder",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/CoreOffice/XMLCoder.git",
+      "state" : {
+        "revision" : "b1e944cbd0ef33787b13f639a5418d55b3bed501",
+        "version" : "0.17.1"
+      }
     }
   ],
-  "version" : 2
+  "version" : 3
 }
