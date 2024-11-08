@@ -16,7 +16,6 @@
 		049BDA252C4E85A300652F71 /* ExampleFile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 049BDA242C4E85A300652F71 /* ExampleFile.swift */; };
 		04A6557F293D24450084CC6A /* Collection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04A6557E293D24450084CC6A /* Collection.swift */; };
 		04B5F38A2938C1AE0088A0D9 /* Int.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04B5F3892938C1AE0088A0D9 /* Int.swift */; };
-		04B5F3B12938F4F50088A0D9 /* Haptics.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04B5F3A92938F4F50088A0D9 /* Haptics.swift */; };
 		04B5F3B9293965F60088A0D9 /* CGPath.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04B5F3B8293965F60088A0D9 /* CGPath.swift */; };
 		04B5F3BB293A16520088A0D9 /* fourier.svg in Resources */ = {isa = PBXBuildFile; fileRef = 04B5F3BA293A16520088A0D9 /* fourier.svg */; };
 		04BA916026DB9FE600014C93 /* Model.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04BA915F26DB9FE600014C93 /* Model.swift */; };
@@ -35,7 +34,6 @@
 		049BDA242C4E85A300652F71 /* ExampleFile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExampleFile.swift; sourceTree = "<group>"; };
 		04A6557E293D24450084CC6A /* Collection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Collection.swift; sourceTree = "<group>"; };
 		04B5F3892938C1AE0088A0D9 /* Int.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Int.swift; sourceTree = "<group>"; };
-		04B5F3A92938F4F50088A0D9 /* Haptics.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Haptics.swift; sourceTree = "<group>"; };
 		04B5F3B8293965F60088A0D9 /* CGPath.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CGPath.swift; sourceTree = "<group>"; };
 		04B5F3BA293A16520088A0D9 /* fourier.svg */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = fourier.svg; sourceTree = "<group>"; };
 		04BA915F26DB9FE600014C93 /* Model.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Model.swift; sourceTree = "<group>"; };
@@ -73,8 +71,10 @@
 		049BDA1D2C4E855E00652F71 /* Models */ = {
 			isa = PBXGroup;
 			children = (
-				04BA915F26DB9FE600014C93 /* Model.swift */,
+				046203B42C2397C400AB6BD9 /* Constants.swift */,
 				049BDA242C4E85A300652F71 /* ExampleFile.swift */,
+				04BA916526DBFB4400014C93 /* Fourier.swift */,
+				04BA915F26DB9FE600014C93 /* Model.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -87,16 +87,6 @@
 				04A6557E293D24450084CC6A /* Collection.swift */,
 			);
 			path = Extensions;
-			sourceTree = "<group>";
-		};
-		04A65581293D43A70084CC6A /* Helpers */ = {
-			isa = PBXGroup;
-			children = (
-				04B5F3A92938F4F50088A0D9 /* Haptics.swift */,
-				04BA916526DBFB4400014C93 /* Fourier.swift */,
-				046203B42C2397C400AB6BD9 /* Constants.swift */,
-			);
-			path = Helpers;
 			sourceTree = "<group>";
 		};
 		04B5F3882938BBA70088A0D9 /* Resources */ = {
@@ -131,7 +121,6 @@
 			children = (
 				049BDA1C2C4E855700652F71 /* Views */,
 				049BDA1D2C4E855E00652F71 /* Models */,
-				04A65581293D43A70084CC6A /* Helpers */,
 				04A65580293D436E0084CC6A /* Extensions */,
 				04B5F3882938BBA70088A0D9 /* Resources */,
 			);
@@ -217,7 +206,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				049BDA232C4E859100652F71 /* PathRenderer.swift in Sources */,
-				04B5F3B12938F4F50088A0D9 /* Haptics.swift in Sources */,
 				04BA916026DB9FE600014C93 /* Model.swift in Sources */,
 				04FCE2D226D5046F001D1BE8 /* FourierApp.swift in Sources */,
 				049BDA252C4E85A300652F71 /* ExampleFile.swift in Sources */,

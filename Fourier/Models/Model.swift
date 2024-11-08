@@ -10,14 +10,14 @@ import Vision
 import VectorPlus
 import SwiftSVG
 
+@MainActor
 @Observable
 class Model {
-    var isSaved = false
-    var showFileImporter = false
     var isDrawing = false
     var path: SwiftUI.Path?
     var epicycles = 10.0
-    private var points = [CGPoint]()
+    var points = [CGPoint]()
+    var size = CGSize()
     
     var nRange: ClosedRange<Double> {
         1...min(Double(max(points.count, 1)), 500)
@@ -29,14 +29,15 @@ class Model {
         points = []
     }
     
-    @MainActor
-    func save(path: SwiftUI.Path, size: CGSize) {
+    func render() {
+        guard let path else { return }
         let renderer = ImageRenderer(content: PathRenderer(path: path))
         renderer.proposedSize = .init(size)
         renderer.scale = 3
-        guard let uiImage = renderer.uiImage else { return }
-        UIImageWriteToSavedPhotosAlbum(uiImage, nil, nil, nil)
-        Haptics.tap()
+        guard let uiImage = renderer.uiImage,
+              let pngData = uiImage.pngData()
+        else { return }
+        try? pngData.write(to: Constants.shareURL)
     }
     
     func importSVG(result: Result<URL, Error>, size: CGSize) {
@@ -60,6 +61,8 @@ class Model {
     }
     
     func scale(points: [CGPoint], size: CGSize) -> [CGPoint] {
+        self.size = size
+        
         let xs = points.compactMap { $0.x }
         let ys = points.compactMap { $0.y }
 
@@ -102,11 +105,10 @@ class Model {
         guard points.count > 1 else { return }
         self.points = points
         update()
+        render()
     }
     
     func update() {
-        Haptics.tap()
-        isSaved = false
         epicycles = min(epicycles, Double(points.count))
         let points = Fourier.transform(N: Int(epicycles), points: points)
         path = Path { path in

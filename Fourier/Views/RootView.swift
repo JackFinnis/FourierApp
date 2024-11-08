@@ -28,9 +28,6 @@ struct RootView: View {
                                 .allowsHitTesting(false)
                         }
                     }
-                    .fileImporter(isPresented: $model.showFileImporter, allowedContentTypes: [.svg]) { result in
-                        model.importSVG(result: result, size: geo.size)
-                    }
 #if os(iOS)
                 ActionBar(model: model, geo: geo)
                     .frame(height: Constants.actionBarHeight, alignment: .bottom)

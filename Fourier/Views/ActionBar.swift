@@ -11,15 +11,18 @@ struct ActionBar: View {
     @Bindable var model: Model
     let geo: GeometryProxy
     
+    @State var showFileImporter = false
+    
+#if os(iOS)
+    let spacing = 5.0
+#elseif os(visionOS)
+    let spacing = 10.0
+#endif
+    
     var body: some View {
         ZStack {
             if model.isDrawing {
-            } else if let path = model.path {
-#if os(iOS)
-                let spacing = 5.0
-#elseif os(visionOS)
-                let spacing = 10.0
-#endif
+            } else if model.path != nil {
                 VStack(spacing: spacing) {
                     HStack(spacing: 15) {
                         Button {
@@ -38,20 +41,9 @@ struct ActionBar: View {
                             if !isStepping { model.update() }
                         }
                         .labelsHidden()
-                        Toggle(isOn: $model.isSaved) {
-                            if model.isSaved {
-                                Label("Saved to Photos", systemImage: "checkmark.circle.fill")
-                            } else {
-                                Label("Save to Photos", systemImage: "plus.circle")
-                            }
-                        }
-                        .font(.headline)
-                        .toggleStyle(.button)
-                        .onChange(of: model.isSaved) { _, isSaved in
-                            if isSaved {
-                                model.save(path: path, size: geo.size)
-                            }
-                        }
+                        ShareLink(item: Constants.shareURL)
+                            .labelStyle(.iconOnly)
+                            .font(.headline)
                     }
                     .labelStyle(.iconOnly)
                     .buttonBorderShape(.circle)
@@ -64,9 +56,8 @@ struct ActionBar: View {
             } else {
                 HStack(spacing: 15) {
                     Button("Import SVG File") {
-                        model.showFileImporter = true
+                        showFileImporter = true
                     }
-                    .buttonStyle(.borderedProminent)
                     Menu("View Examples") {
                         ForEach(ExampleFile.allCases, id: \.self) { file in
                             Button(file.name) {
@@ -75,8 +66,8 @@ struct ActionBar: View {
                         }
                     }
                     .menuStyle(.button)
-                    .buttonStyle(.bordered)
                 }
+                .buttonStyle(.bordered)
                 .buttonBorderShape(.capsule)
                 .font(.headline)
                 #if os(iOS)
@@ -85,6 +76,9 @@ struct ActionBar: View {
             }
         }
         .padding(.horizontal)
+        .fileImporter(isPresented: $showFileImporter, allowedContentTypes: [.svg]) { result in
+            model.importSVG(result: result, size: geo.size)
+        }
     }
 }
 
