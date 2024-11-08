@@ -109,6 +109,9 @@ class Model {
     }
     
     func update() {
+        #if os(iOS)
+        UIImpactFeedbackGenerator().impactOccurred()
+        #endif
         epicycles = min(epicycles, Double(points.count))
         let points = Fourier.transform(N: Int(epicycles), points: points)
         path = Path { path in
