@@ -153,7 +153,8 @@ struct ContentView: View {
         .monospacedDigit()
         .sheet(isPresented: $showShareSheet) {
             ShareSheet(items: [URL(string: "https://apps.apple.com/app/id1582827502")!])
-                .presentationDetents([.medium])
+                .presentationDetents([.medium, .large])
+                .presentationDragIndicator(.hidden)
         }
         .onReceive(Timer.publish(every: 1.0/30, on: .main, in: .common).autoconnect()) { _ in
             guard model.isProgressive else { return }
